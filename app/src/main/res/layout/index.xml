@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".index">
+
+    <Button
+        android:id="@+id/btnSignout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/roundedbutton"
+        android:text="sign out" />
+
+    <Button
+        android:id="@+id/personalbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="personal"
+        tools:layout_editor_absoluteX="301dp"
+        tools:layout_editor_absoluteY="29dp"
+        android:background="@drawable/roundedbutton"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        />
+
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/books4all"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="95dp"
+        android:layout_below="@+id/personalbtn"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="245dp"
+        android:layout_below="@+id/logo"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="enter book's name"
+            android:textColor="#000000"
+            android:textColorHighlight="#000000"
+            android:textColorHint="#000000" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/personalDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/search"
+        android:baselineAligned="false"
+        android:layout_marginTop="10sp"
+        >
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="all"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginHorizontal="5dp"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="genre 1"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginHorizontal="5dp"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="genre 2"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginHorizontal="5dp"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/personalDown"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:text="in here there will be a book 1"
+            android:textColor="@color/text"
+            android:textSize="32sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:text="in here there will be a book 2"
+            android:textColor="@color/text"
+            android:textSize="32sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtInput1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnScan"
+        android:layout_width="87dp"
+        android:layout_height="62dp"
+        android:text="+"
+        android:textSize="80px"
+        tools:layout_editor_absoluteX="307dp"
+        tools:layout_editor_absoluteY="649dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/roundedbutton"
+        android:layout_margin="10dp"
+        />
+
+    <Button
+        android:id="@+id/btnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="map"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="656dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/roundedbutton"
+        android:layout_margin="10dp"
+        />
+
+
+
+</RelativeLayout>

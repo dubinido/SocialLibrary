@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/productHead"
+        >
+
+        <Button
+            android:id="@+id/btnMain"
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:layout_alignParentRight="true"
+            android:text="main"
+            android:layout_marginTop="20sp"
+            />
+
+        <ImageView
+            android:id="@+id/headLogo"
+            android:layout_width="199dp"
+            android:layout_height="69dp"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/books4all"
+            android:layout_marginTop="10sp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/productMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/productHead"
+        android:layout_marginTop="10sp"
+        >
+
+        <LinearLayout
+            android:id="@+id/bookDetails"
+            android:layout_width="190sp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="top"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10sp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="name"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="name"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="name"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="190sp"
+            android:layout_height="270sp"
+            app:srcCompat="@drawable/harry"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10sp"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/productBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/productMain"
+        android:baselineAligned="false"
+        android:layout_marginTop="10sp"
+        >
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text=" add to whislist"
+
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="borrow now"
+
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="map"
+
+
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="rate"
+
+            />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/rateList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/productBtn">
+
+
+    </ListView>
+
+
+
+
+</RelativeLayout>
