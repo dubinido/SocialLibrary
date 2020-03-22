@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- TODO: change product to dialog?, redesign-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:layoutDirection="ltr">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,10 +16,13 @@
         <Button
             android:id="@+id/btnMain"
             android:layout_width="wrap_content"
-            android:layout_height="61dp"
+            android:layout_height="60dp"
             android:layout_alignParentRight="true"
             android:text="main"
             android:layout_marginTop="20sp"
+            android:background="@color/btn"
+            android:textColor="@color/btnText"
+            android:layout_marginRight="10dp"
             />
 
         <ImageView
@@ -39,10 +44,10 @@
         android:layout_marginTop="10sp"
         >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/bookDetails"
             android:layout_width="190sp"
-            android:layout_height="wrap_content"
+            android:layout_height="270dp"
             android:orientation="vertical"
             android:gravity="top"
             android:layout_alignParentLeft="true"
@@ -50,22 +55,42 @@
             >
 
             <TextView
+                android:id="@+id/textBookNameProduct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="name"
                 />
             <TextView
+                android:id="@+id/textBookAuthorProduct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="name"
+                android:layout_below="@id/textBookNameProduct"
                 />
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/textBookRateProduct"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="name"
+                android:layout_below="@id/textBookAuthorProduct"
+                />
+            <TextView
+                android:id="@+id/textBookGenreProduct"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/textBookAuthorProduct"
+                />
+            <TextView
+                android:id="@+id/textBookDescProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="name"
+                android:layout_below="@id/textBookRateProduct"
                 />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/cover"
@@ -90,32 +115,39 @@
         >
 
         <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:text=" add to whislist"
-
+            android:background="@color/btn"
+            android:textColor="@color/btnText"
+            android:layout_marginHorizontal="5dp"
             />
 
         <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:text="borrow now"
-
+            android:background="@color/btn"
+            android:textColor="@color/btnText"
+            android:layout_marginHorizontal="5dp"
             />
 
         <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:text="map"
-
-
+            android:background="@color/btn"
+            android:textColor="@color/btnText"
+            android:layout_marginHorizontal="5dp"
             />
 
         <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:text="rate"
-
+            android:background="@color/btn"
+            android:textColor="@color/btnText"
+            android:layout_marginHorizontal="5dp"
             />
 
     </LinearLayout>
@@ -125,8 +157,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/productBtn">
-
-
     </ListView>
 
 

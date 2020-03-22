@@ -98,7 +98,7 @@ public class ScanActivity extends AppCompatActivity {
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                   Toast.makeText(ScanActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                  // Toast.makeText(ScanActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show(); TODO: remove comment
                 }
             });
         }

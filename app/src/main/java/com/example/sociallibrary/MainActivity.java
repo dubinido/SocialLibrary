@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(GoogleSignInAccount account) {
         if(account != null) {
-            //Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.index.class);
-            Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.index.class);
+            //Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.Index.class);
+            Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.Index.class);
             startActivity(intent);
         }
     }

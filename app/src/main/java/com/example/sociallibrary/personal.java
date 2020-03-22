@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +23,29 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class personal extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
+    Button btnMain, btnSignOut;
+    TextView tvHelloUser;
+    ImageView ivPersonImg;
+    String userName;
+    String userImg;
+
+    static final Integer BOOK_LIMIT = 20;
+    DatabaseReference databaseBooks;
+    ListView listViewBooks;
+    List<Book> bookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +59,24 @@ public class personal extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        Button btnMain, btnSignOut;
-        TextView tvHelloUser;
-        String userName;
-
         btnMain = findViewById(R.id.btnMain);
         btnSignOut = findViewById(R.id.btnSignout);
         tvHelloUser = findViewById(R.id.tvHelloUser);
+        ivPersonImg = findViewById(R.id.ivPersonalUserImg);
         userName = getFirstName();
+        userImg = getProfileImg();
+
 
         tvHelloUser.setText("Hello " + userName);
+        if (userImg=="")
+            ivPersonImg.setImageResource(R.drawable.profile_pic);
+        else
+            Picasso.get().load(userImg).into(ivPersonImg);
 
         btnMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(personal.this, com.example.sociallibrary.index.class);
+                Intent intent = new Intent(personal.this, com.example.sociallibrary.Index.class);
                 startActivity(intent);
             }
         });
@@ -63,7 +87,14 @@ public class personal extends AppCompatActivity {
                 signOut();
             }
         });
+
+        databaseBooks = FirebaseDatabase.getInstance().getReference("books");
+        listViewBooks = (ListView) findViewById(R.id.listBooksPersonal);
+        bookList = new ArrayList<>();
+
+
     }
+
     private void signOut() //sign out method
     {
         mGoogleSignInClient.signOut()
@@ -87,8 +118,51 @@ public class personal extends AppCompatActivity {
         }
         return "";
     }
+    private String getProfileImg() // return the user profile
+    {
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(personal.this);
+        String personProfileImg;
+        if (acct != null) {
+            if (acct.getPhotoUrl()!=null) {
+                personProfileImg = acct.getPhotoUrl().toString();
+                if (personProfileImg!="")
+                {
+                    return personProfileImg;
+                }
+            }
+        }
+        return "";
+    }
 
 
+    //book list display
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        databaseBooks.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                bookList.clear();
+                int counter = 0;
+
+                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                    if (counter < BOOK_LIMIT) {
+                        Book book = bookSnapshot.getValue(Book.class);
+
+                        bookList.add(book);
+                        counter++;
+                    }
+                }
+                BookList adapter = new BookList(personal.this, bookList);
+                listViewBooks.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

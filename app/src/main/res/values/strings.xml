@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SocialLibrary</string>
+    <string name="app_name">Books4All</string>
 
     <string name="title_activity_personal">personal</string>
     <string name="dummy_button">Dummy Button</string>
