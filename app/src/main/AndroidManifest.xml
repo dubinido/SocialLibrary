@@ -40,6 +40,9 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".Product"
+            android:label="product" />
+        <activity
             android:name=".personal"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_personal"

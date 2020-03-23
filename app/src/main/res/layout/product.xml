@@ -55,45 +55,45 @@
             >
 
             <TextView
-                android:id="@+id/textBookNameProduct"
+                android:id="@+id/tvProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="name"
                 />
             <TextView
-                android:id="@+id/textBookAuthorProduct"
+                android:id="@+id/tvProductAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="name"
-                android:layout_below="@id/textBookNameProduct"
+                android:layout_below="@id/tvProductName"
                 />
             <TextView
-                android:id="@+id/textBookRateProduct"
+                android:id="@+id/tvProductRate"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="name"
-                android:layout_below="@id/textBookAuthorProduct"
+                android:layout_below="@id/tvProductAuthor"
                 />
             <TextView
-                android:id="@+id/textBookGenreProduct"
+                android:id="@+id/tvProductGenre"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="name"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/textBookAuthorProduct"
+                android:layout_below="@id/tvProductAuthor"
                 />
             <TextView
-                android:id="@+id/textBookDescProduct"
+                android:id="@+id/tvProductDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="name"
-                android:layout_below="@id/textBookRateProduct"
+                android:layout_below="@id/tvProductRate"
                 />
 
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/cover"
+            android:id="@+id/tvProductImg"
             android:layout_width="190sp"
             android:layout_height="270sp"
             app:srcCompat="@drawable/harry"

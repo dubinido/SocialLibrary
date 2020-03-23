@@ -57,49 +57,71 @@
         android:textColorHint="#636363"
         android:textSize="32dp" />
 
-    <LinearLayout
-        android:id="@+id/personalDown"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvGenres"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:layout_below="@+id/editTextBook"
         android:baselineAligned="false"
         android:layout_marginTop="10sp"
-        >
+        android:layout_marginHorizontal="10dp"/>
+    <!--
+        <LinearLayout
+            android:id="@+id/personalDown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/editTextBook"
+            android:baselineAligned="false"
+            android:layout_marginTop="10sp"
+            >
 
-        <Button
-            android:id="@+id/addTemp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="all"
-            android:background="@drawable/roundedbutton"
-            android:layout_marginHorizontal="5dp"
-            android:textColor="@color/btnText"
-            />
+            <Button
+                android:id="@+id/addTemp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="all"
+                android:background="@drawable/roundedbutton"
+                android:layout_marginHorizontal="5dp"
+                android:textColor="@color/btnText"
+                />
 
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="genre 1"
-            android:background="@drawable/roundedbutton"
-            android:layout_marginHorizontal="5dp"
-            android:textColor="@color/btnText"
-            />
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="genre 1"
+                android:background="@drawable/roundedbutton"
+                android:layout_marginHorizontal="5dp"
+                android:textColor="@color/btnText"
+                />
 
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="genre 2"
-            android:background="@drawable/roundedbutton"
-            android:layout_marginHorizontal="5dp"
-            android:textColor="@color/btnText"
-            />
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="genre 2"
+                android:background="@drawable/roundedbutton"
+                android:layout_marginHorizontal="5dp"
+                android:textColor="@color/btnText"
+                />
 
-    </LinearLayout>
+        </LinearLayout>
+        -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBookList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rvGenres"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="10dp"
 
 
+        />
 
+    <!--
     <ListView
         android:id="@+id/bookList"
         android:layout_width="match_parent"
@@ -109,6 +131,7 @@
         >
 
     </ListView>
+            -->
 
     <Button
         android:id="@+id/btnScan"

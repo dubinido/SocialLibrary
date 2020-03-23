@@ -2,6 +2,8 @@ package com.example.sociallibrary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android. os.Bundle;
@@ -30,9 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Index extends AppCompatActivity {
+public class Index extends AppCompatActivity implements BookAdapter.OnBookListener  {
 
     private GoogleSignInClient mGoogleSignInClient;
+    public static final String BOOK_ID="id";
 
     Button btnPersonal, btnSignOut, btnScan;
     ImageButton btnMap;
@@ -41,11 +44,13 @@ public class Index extends AppCompatActivity {
     DatabaseReference databaseBooks;
     ListView listViewBooks;
     List<Book> bookList;
-    /**
-     DatabaseReference databaseGenres;
-     ListView listViewGenres;
-     List<Genre> genreList;
-     */
+
+    RecyclerView rvBooks;
+    RecyclerView rvGenres;
+
+    DatabaseReference databaseGenres;
+    ListView listViewGenres;
+    List<Genre> genreList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +102,16 @@ public class Index extends AppCompatActivity {
 
         //book list
         databaseBooks = FirebaseDatabase.getInstance().getReference("books");
-        listViewBooks = (ListView) findViewById(R.id.bookList);
+        //listViewBooks = (ListView) findViewById(R.id.bookList);
         bookList=new ArrayList<>();
 
-        //genres list in build
-        /**
-         databaseGenres = FirebaseDatabase.getInstance().getReference("genres");
-         listViewGenres = (ListView) findViewById(R.id.genreList);
-         genreList=new ArrayList<>();
-         */
+        rvBooks = (RecyclerView) findViewById(R.id.rvBookList);
+
+        databaseGenres = FirebaseDatabase.getInstance().getReference("genres");
+        //listViewGenres = (ListView) findViewById(R.id.genreList);
+        genreList=new ArrayList<>();
+
+        rvGenres = (RecyclerView) findViewById(R.id.rvGenres);
 
         //this is only for adding example books
         /**
@@ -172,8 +178,11 @@ public class Index extends AppCompatActivity {
                         counter++;
                     }
                 }
-                BookList adapter = new BookList(Index.this, bookList);
-                listViewBooks.setAdapter(adapter);
+                BookAdapter adapter = new BookAdapter(bookList, Index.this );
+                //listViewBooks.setAdapter(adapter);
+                rvBooks.setAdapter(adapter);
+
+                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
             }
 
             @Override
@@ -182,7 +191,6 @@ public class Index extends AppCompatActivity {
             }
         });
 
-        /** genres list in build
         databaseGenres.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -195,8 +203,13 @@ public class Index extends AppCompatActivity {
 
                     genreList.add(genre);
                 }
-                GenreList adapter = new GenreList(Index.this, genreList);
-                listViewGenres.setAdapter(adapter);
+                //GenreList adapter = new GenreList(Index.this, genreList);
+                //listViewGenres.setAdapter(adapter);
+                GenreAdapter adapter = new GenreAdapter( genreList);
+                //listViewBooks.setAdapter(adapter);
+                rvGenres.setAdapter(adapter);
+
+                rvGenres.setLayoutManager(new LinearLayoutManager(Index.this,LinearLayoutManager.HORIZONTAL, false));
             }
 
             @Override
@@ -204,6 +217,16 @@ public class Index extends AppCompatActivity {
 
             }
         });
-         */
+    }
+
+    @Override
+    public void onBookClick(int position) {
+        Intent intent = new Intent(getApplicationContext(),Product.class);
+
+        intent.putExtra(BOOK_ID,bookList.get(position).getId());
+
+        startActivity(intent);
+
+        Toast.makeText(this,bookList.get(position).getId(),Toast.LENGTH_LONG).show();
     }
 }
