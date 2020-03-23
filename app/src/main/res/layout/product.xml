@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO: change product to dialog?, redesign-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -11,173 +10,232 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/productHead"
-        >
+        android:padding="10dp">
 
         <Button
-            android:id="@+id/btnMain"
+            android:id="@+id/btnCloseProduct"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_alignParentRight="true"
             android:text="main"
-            android:layout_marginTop="20sp"
-            android:background="@color/btn"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/roundedbutton"
             android:textColor="@color/btnText"
             android:layout_marginRight="10dp"
             />
 
-        <ImageView
-            android:id="@+id/headLogo"
-            android:layout_width="199dp"
-            android:layout_height="69dp"
-            android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/books4all"
-            android:layout_marginTop="10sp"
-            />
+
 
     </RelativeLayout>
+
+    <TextView
+        android:textSize="25dp"
+        android:id="@+id/tvProductName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:textColor="@color/text"
+        android:layout_below="@+id/productHead"
+        android:layout_marginLeft="15dp"
+        android:textStyle="bold"
+        />
+
 
     <RelativeLayout
         android:id="@+id/productMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/productHead"
-        android:layout_marginTop="10sp"
+        android:layout_height="250dp"
+        android:layout_below="@+id/tvProductName"
+        android:paddingHorizontal="10dp"
         >
 
         <RelativeLayout
             android:id="@+id/bookDetails"
-            android:layout_width="190sp"
-            android:layout_height="270dp"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="top"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10sp"
+            android:layout_marginLeft="10dp"
             >
 
             <TextView
-                android:id="@+id/tvProductName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="name"
-                />
-            <TextView
                 android:id="@+id/tvProductAuthor"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="name"
-                android:layout_below="@id/tvProductName"
+                android:text="author"
+                android:textColor="@color/text"
                 />
+            <!--
             <TextView
                 android:id="@+id/tvProductRate"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="name"
                 android:layout_below="@id/tvProductAuthor"
+                android:textColor="@color/text"
+                android:layout_alignParentRight="true"
+                android:paddingRight="15dp"
+                android:text="4.6"/>
+                -->
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvProductRate"
+                android:numStars="5"
+                android:rating="3.5"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="1dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:progressTint="@color/star"
+                android:layout_alignBottom="@id/tvProductGenre"
+                android:isIndicator="true"
+                android:progressBackgroundTint="@color/star_back"
                 />
+
+
             <TextView
                 android:id="@+id/tvProductGenre"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="name"
-                android:layout_alignParentRight="true"
+                android:text="genre"
+                android:layout_alignParentLeft="true"
                 android:layout_below="@id/tvProductAuthor"
+                android:textColor="@color/text"
                 />
             <TextView
                 android:id="@+id/tvProductDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="name"
-                android:layout_below="@id/tvProductRate"
+                android:layout_below="@id/tvProductGenre"
+                android:textColor="@color/text"
+                android:scrollbars = "vertical"
                 />
 
         </RelativeLayout>
 
         <ImageView
             android:id="@+id/tvProductImg"
-            android:layout_width="190sp"
-            android:layout_height="270sp"
-            app:srcCompat="@drawable/harry"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/mapslogo"
+            android:layout_toRightOf="@+id/bookDetails"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:padding="15dp"
+
             />
 
     </RelativeLayout>
 
     <LinearLayout
+        android:padding="10dp"
         android:id="@+id/productBtn"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:layout_below="@+id/productMain"
         android:baselineAligned="false"
-        android:layout_marginTop="10sp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/roundedbutton"
         >
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:text=" add to whislist"
-            android:background="@color/btn"
-            android:textColor="@color/btnText"
-            android:layout_marginHorizontal="5dp"
-            />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:text="borrow now"
-            android:background="@color/btn"
-            android:textColor="@color/btnText"
-            android:layout_marginHorizontal="5dp"
+        <LinearLayout
             android:layout_marginTop="5dp"
-            />
-
-        <Button
-            android:id="@+id/btn_map_product"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:text="map"
-            android:background="@color/btn"
-            android:textColor="@color/btnText"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="5dp"
-            />
-<LinearLayout
-    android:id="@+id/personalBtns"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_horizontal"
-    android:layout_below="@+id/btn_map_product"
-    android:baselineAligned="false"
-    android:layout_marginTop="10sp">
-
-        <RatingBar
-            android:id="@+id/rating_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:background="@color/btn"
-            android:numStars="5"
-            android:stepSize="0.5"
-            android:textColor="@color/btnText" />
-
-        <Button
-            android:id="@+id/submit_rate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="submit"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/btn"
-            android:textColor="@color/btnText"
-            />
+            android:orientation="vertical"
+            >
+
+            <ImageButton
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/wishlist"
+                android:layout_marginHorizontal="5dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/roundedbutton"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="3dp"
+                android:text="wishlist"
+                android:textColor="@color/btnText"
+                android:textStyle="bold" />
+
         </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <ImageButton
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/chaticon"
+                android:layout_marginHorizontal="5dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/roundedbutton"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="3dp"
+                android:text="borrow"
+                android:textColor="@color/btnText"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <ImageButton
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/mapslogo"
+                android:scaleType="fitXY"
+                android:background="@drawable/roundedbutton"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="3dp"
+                android:text="map"
+                android:textColor="@color/btnText"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
-
-
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/productBtn"
+        android:numStars="5"
+        android:rating="5"
+        android:layout_centerHorizontal="true"
+        android:progressTint="@color/star"
+        android:progressBackgroundTint="@color/star_back"
+        android:isIndicator="false"
+        android:layout_marginTop="10dp"
+        />
 
 
 

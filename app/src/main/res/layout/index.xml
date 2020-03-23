@@ -42,10 +42,22 @@
 
     </RelativeLayout>
 
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/magnifier"
+        android:layout_alignRight="@id/editTextBook"
+        android:layout_alignBottom="@id/editTextBook"
+        android:scaleType="fitXY"
+        android:background="@color/colorPrimary"
+        android:padding="15dp"
+        android:alpha="0.55"
+        />
+
     <EditText
         android:id="@+id/editTextBook"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/indexTop"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
@@ -54,8 +66,13 @@
         android:hint="enter book's name"
         android:paddingLeft="20dp"
         android:textColor="@color/btnText"
-        android:textColorHint="#636363"
-        android:textSize="32dp" />
+        android:textColorHint="#8c000000"
+        android:textSize="24dp"
+        android:paddingVertical="19dp"
+        android:background="@drawable/outline_search_bar"
+        />
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGenres"
@@ -67,48 +84,7 @@
         android:baselineAligned="false"
         android:layout_marginTop="10sp"
         android:layout_marginHorizontal="10dp"/>
-    <!--
-        <LinearLayout
-            android:id="@+id/personalDown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layout_below="@+id/editTextBook"
-            android:baselineAligned="false"
-            android:layout_marginTop="10sp"
-            >
 
-            <Button
-                android:id="@+id/addTemp"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="all"
-                android:background="@drawable/roundedbutton"
-                android:layout_marginHorizontal="5dp"
-                android:textColor="@color/btnText"
-                />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="genre 1"
-                android:background="@drawable/roundedbutton"
-                android:layout_marginHorizontal="5dp"
-                android:textColor="@color/btnText"
-                />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="genre 2"
-                android:background="@drawable/roundedbutton"
-                android:layout_marginHorizontal="5dp"
-                android:textColor="@color/btnText"
-                />
-
-        </LinearLayout>
-        -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBookList"
@@ -121,18 +97,6 @@
 
         />
 
-    <!--
-    <ListView
-        android:id="@+id/bookList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/personalDown"
-        android:layout_marginTop="30dp"
-        >
-
-    </ListView>
-            -->
-
     <Button
         android:id="@+id/btnScan"
         android:layout_width="80dp"
@@ -144,7 +108,8 @@
         android:background="@drawable/roundedbutton"
         android:text="+"
         android:textSize="80px"
-        android:textColor="@color/btnText"/>
+        android:textColor="@color/btnText"
+        />
 
     <ImageButton
         android:id="@+id/btnMap"
@@ -157,6 +122,7 @@
         android:scaleType="fitXY"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
+
         />
 
 

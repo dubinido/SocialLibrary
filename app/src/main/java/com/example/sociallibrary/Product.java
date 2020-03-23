@@ -2,6 +2,9 @@ package com.example.sociallibrary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,8 +23,9 @@ public class Product extends AppCompatActivity {
     TextView tvProductId;
     TextView tvProductName;
     TextView tvProductAuthor;
-    TextView tvProductRate;
+    RatingBar tvProductRate;
     TextView tvProductGenre;
+    Button btnCloseProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +40,9 @@ public class Product extends AppCompatActivity {
 
         tvProductName = (TextView) findViewById(R.id.tvProductName);
         tvProductAuthor = (TextView) findViewById(R.id.tvProductAuthor);
-        tvProductRate = (TextView) findViewById(R.id.tvProductRate);
+        tvProductRate = (RatingBar) findViewById(R.id.tvProductRate);
         tvProductGenre = (TextView) findViewById(R.id.tvProductGenre);
+        btnCloseProduct = (Button) findViewById(R.id.btnCloseProduct);
     }
 
     @Override
@@ -51,13 +56,21 @@ public class Product extends AppCompatActivity {
                 tvProductName.setText(book.getName());
                 tvProductAuthor.setText(book.getAuthor());
                 tvProductGenre.setText(book.getGenre());
-                tvProductRate.setText(book.getRating().toString());
+                tvProductRate.setNumStars((int) Math.round(book.getRating()));
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        btnCloseProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Index.class);
+                startActivity(intent);
             }
         });
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#006EBF</color>
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#393E46</color>
     <color name="background">#FFFFFF</color>
@@ -10,5 +10,7 @@
     <color name="text">#000000</color>
     <color name="btn">#006EBF</color>
     <color name="btnText">#fff</color>
+    <color name="star">#FFEB3B</color>
+    <color name="star_back">#575655</color>
 
 </resources>

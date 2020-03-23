@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,7 +45,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fetchLastLocation();
 
         Button btnBack = findViewById(R.id.btnBack);
-
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +94,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (currentLocation != null){
             latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                    .title("Im Here");
+                    .title("Im Here")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.books4all)); //this is how to put icon for book
+            //TODO: change the icon to real icon - baraks job
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13)); // select the best zoom for us between 2 to 21
             // 21 is the closest
@@ -104,7 +106,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         switch (requestCode){
             case REQUEST_CODE:
                 if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED)
@@ -113,6 +116,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
         }
+    }
 
+    public void PlaceMarker(LatLng bookLoc) //gets a bookLoc and place a pin
+    {
+        //TODO: complete this method
     }
 }

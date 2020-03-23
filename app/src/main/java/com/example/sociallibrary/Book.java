@@ -1,5 +1,7 @@
 package com.example.sociallibrary;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Book {
 
     private String id;
