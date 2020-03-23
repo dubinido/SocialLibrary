@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -82,29 +83,31 @@ public class ScanActivity extends AppCompatActivity {
         });
 
         options = new FirebaseVisionBarcodeDetectorOptions.Builder()
-                .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_EAN_13).build();
+                .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_ALL_FORMATS).build();
         detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options);
     }
 
-    private void processImage(FirebaseVisionImage image) {
+    private void processImage(final FirebaseVisionImage image) {
         if(!isDetected)
         {
+            //Toast.makeText(this, "image size: "+ image.get, Toast.LENGTH_SHORT).show();
             detector.detectInImage(image).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
                 @Override
                 public void onSuccess(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
-                    processResult(firebaseVisionBarcodes);
+                    if(!isDetected)
+                        processResult(firebaseVisionBarcodes);
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                  // Toast.makeText(ScanActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show(); TODO: remove comment
+                    Toast.makeText(ScanActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();// TODO: remove comment
                 }
             });
         }
     }
 
-    private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
+   /* private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
         if(firebaseVisionBarcodes.size() > 0)
         {
             isDetected = true;
@@ -121,6 +124,7 @@ public class ScanActivity extends AppCompatActivity {
                     break;
                     case FirebaseVisionBarcode.TYPE_ISBN:
                     {
+                        createDialog(item.getRawValue());
                         //TODO: deal with the isbn
                     }
                     break;
@@ -131,11 +135,28 @@ public class ScanActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     break;
-                    default: break;
+                    default: createDialog(item.getRawValue());
                 }
             }
         }
     }
+*/
+   private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
+       if(firebaseVisionBarcodes.size() > 0)
+           {
+               isDetected = true;
+               btn_start_again.setEnabled(isDetected);
+
+               for(FirebaseVisionBarcode item: firebaseVisionBarcodes)
+               {
+                   int value_type = item.getValueType();
+                   createDialog(item.getRawValue());
+
+                   break;
+                   // TODO: deal with only isbn code
+               }
+           }
+       }
 
     private void createDialog(String text) {
         AlertDialog. Builder builder = new AlertDialog.Builder(this);
@@ -155,6 +176,7 @@ public class ScanActivity extends AppCompatActivity {
         FirebaseVisionImageMetadata metadata = new FirebaseVisionImageMetadata.Builder()
                 .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21 )
                 .setHeight(frame.getSize().getHeight())
+                .setWidth(frame.getSize().getWidth())
                // .setRotation(frame.getRotation())
         .build();
         return FirebaseVisionImage.fromByteArray(data,metadata);

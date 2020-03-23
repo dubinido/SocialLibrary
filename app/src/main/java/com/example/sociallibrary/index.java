@@ -168,15 +168,9 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 bookList.clear();
                 int counter=0;
 
-                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
-                {
-                    if (counter<BOOK_LIMIT)
-                    {
-                        Book book = bookSnapshot.getValue(Book.class);
-
-                        bookList.add(book);
-                        counter++;
-                    }
+                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                Book book = bookSnapshot.getValue(Book.class);
+                bookList.add(book);
                 }
                 BookAdapter adapter = new BookAdapter(bookList, Index.this );
                 //listViewBooks.setAdapter(adapter);
@@ -187,7 +181,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                //Toast.makeText(Index.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

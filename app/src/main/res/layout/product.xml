@@ -106,16 +106,17 @@
     <LinearLayout
         android:id="@+id/productBtn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_below="@+id/productMain"
         android:baselineAligned="false"
         android:layout_marginTop="10sp"
+        android:layout_marginHorizontal="10dp"
         >
 
         <Button
-            android:layout_width="90dp"
+            android:layout_width="match_parent"
             android:layout_height="90dp"
             android:text=" add to whislist"
             android:background="@color/btn"
@@ -124,40 +125,58 @@
             />
 
         <Button
-            android:layout_width="90dp"
+            android:layout_width="match_parent"
             android:layout_height="90dp"
             android:text="borrow now"
             android:background="@color/btn"
             android:textColor="@color/btnText"
             android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="5dp"
             />
 
         <Button
-            android:layout_width="90dp"
+            android:id="@+id/btn_map_product"
+            android:layout_width="match_parent"
             android:layout_height="90dp"
             android:text="map"
             android:background="@color/btn"
             android:textColor="@color/btnText"
             android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="5dp"
             />
+<LinearLayout
+    android:id="@+id/personalBtns"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    android:layout_below="@+id/btn_map_product"
+    android:baselineAligned="false"
+    android:layout_marginTop="10sp">
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:background="@color/btn"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:textColor="@color/btnText" />
 
         <Button
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:text="rate"
+            android:id="@+id/submit_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="submit"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="5dp"
             android:background="@color/btn"
             android:textColor="@color/btnText"
-            android:layout_marginHorizontal="5dp"
             />
-
+        </LinearLayout>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/rateList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/productBtn">
-    </ListView>
 
 
 
