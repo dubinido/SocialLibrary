@@ -1,16 +1,27 @@
 package com.example.sociallibrary;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -21,16 +32,37 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import static com.example.sociallibrary.Index.BOOK_ID;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    Location currentLocation;
+    Drawable iconPin;
+    public static Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
+    DatabaseReference databaseBooks;
+    List<Book> books;
+    List<String> booksIds;
+    public static final String USER_ID="userId";
+    RecyclerView rvBooks;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +72,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        databaseBooks = FirebaseDatabase.getInstance().getReference();
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
@@ -52,6 +87,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
+        books = new ArrayList<>();
+        booksIds = new ArrayList<>();
+        rvBooks = (RecyclerView) findViewById(R.id.rvUserBookBorrow);
     }
 
     private void fetchLastLocation() {
@@ -77,32 +115,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.location_icon);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap my_smallMarker = Bitmap.createScaledBitmap(b,120,160,false);
         mMap = googleMap;
-        // I think this is my current location
+        // this is my current location
         LatLng latLng;
         if (currentLocation != null){
             latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                    .title("Im Here")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.books4all)); //this is how to put icon for book
-            //TODO: change the icon to real icon - baraks job
+                    .icon(BitmapDescriptorFactory.fromBitmap(my_smallMarker)); //this is how to put icon for book
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13)); // select the best zoom for us between 2 to 21
             // 21 is the closest
-            googleMap.addMarker(markerOptions);
+            googleMap.addMarker(markerOptions); // my marker - my place
+            placeBooks(googleMap, databaseBooks);
+
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    //TODO: barak - marker.getTag() return the userKey, do your on click herhe
+                    Log.d("ido", "user name is " + marker.getTag());
+                    Intent intent = new Intent(MapsActivity.this,UserBookBorrow.class);
+                    intent.putExtra(USER_ID,marker.getTag().toString());
+                    intent.putExtra("MyLat",String.valueOf(currentLocation.getLatitude()));
+                    intent.putExtra("MyLng",String.valueOf(currentLocation.getLongitude()));
+                    startActivity(intent);
+                    return false;
+
+                }
+            });
         }
 
+    }
+
+    private void placeBooks(final GoogleMap googleMap, DatabaseReference databaseBooks) {
+        Query qUsers = databaseBooks.child("users");
+        qUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren())
+                {
+                    User user = userSnapshot.getValue(User.class);
+                    placeMarker(googleMap, user.getLocation(), user.getUserName(), userSnapshot.getKey());
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
@@ -118,8 +183,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void PlaceMarker(LatLng bookLoc) //gets a bookLoc and place a pin
+    public void placeMarker(GoogleMap googleMap, LatLng bookLocation, String userName, String userKey) //gets a bookLoc and place a pin
     {
-        //TODO: complete this method
+        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.icon_book_map);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b,120,160,false);
+        MarkerOptions markerOptions = new MarkerOptions().position(bookLocation)
+                .title(userName) // sets user name
+                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)); //this is how to put icon for book
+        Marker marker = googleMap.addMarker(markerOptions);
+        marker.setTag(userKey);
     }
+
+    public static Location currentLocation()
+    {
+        return currentLocation;
+    }
+
+
 }

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/productHead"
+        android:padding="10dp"/>
+
+    <TextView
+        android:textSize="25dp"
+        android:id="@+id/tvdTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="is this your book?"
+        android:textColor="@color/text"
+        android:layout_below="@+id/productHead"
+        android:layout_margin="15dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingVertical="20dp"
+        android:background="#eaeaea"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/productMain"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/tvdTitle"
+        android:paddingHorizontal="10dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/bookDetails"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="top"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                style="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:id="@+id/tvdName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="@color/text"
+                android:layout_margin="5dp"
+                />
+
+            <TextView
+                android:id="@+id/tvdAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="author"
+                android:textColor="@color/text"
+                android:layout_below="@+id/tvdName"
+                android:layout_margin="5dp"
+                />
+
+            <TextView
+                android:id="@+id/tvdGenre"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="genre"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/tvdAuthor"
+                android:textColor="@color/text"
+                android:layout_margin="5dp"
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/tvdImg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/mapslogo"
+            android:layout_toRightOf="@+id/bookDetails"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:padding="15dp"
+
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/productMain"
+        android:layout_marginTop="10dp"
+        android:background="#EAEAEA"
+        >
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="80dp"
+            android:layout_weight="0.5"
+            android:text="no"
+            android:id="@+id/btnAddNo"
+            android:layout_marginHorizontal="5dp"
+            android:textSize="35dp"
+            android:background="@drawable/roundedbutton"
+            android:textColor="@color/btnText"
+            />
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="80dp"
+            android:layout_weight="0.5"
+            android:text="yes"
+            android:id="@+id/btnAddYes"
+            android:layout_marginHorizontal="5dp"
+            android:textSize="35dp"
+            android:background="@drawable/roundedbutton"
+            android:textColor="@color/btnText"
+            />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

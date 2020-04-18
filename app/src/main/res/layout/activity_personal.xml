@@ -7,13 +7,10 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:gravity="top"
-    tools:context=".personal"
+    tools:context=".Personal"
     android:layoutDirection="ltr"
     >
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
     <Button
         android:id="@+id/btnSignout"
         android:layout_width="wrap_content"
@@ -45,8 +42,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
         />
-    <!-- TODO: make the profile pic circle -->
 
     <TextView
         android:id="@+id/tvHelloUser"
@@ -85,6 +82,7 @@
             />
 
         <Button
+            android:id="@+id/btnBooks"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:text="my books"
@@ -94,6 +92,7 @@
             />
 
         <Button
+            android:id="@+id/btnBorrowed"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:text="borrowed books"
@@ -105,13 +104,52 @@
 
     </LinearLayout>
 
-    <ListView
+    <TextView
+        android:id="@+id/tvPersonalEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/personalBtns"
-        android:id="@+id/listBooksPersonal"
         android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:text="It seems like you don't have any books in here..."
+        android:gravity="center"
+        android:textColor="@color/text"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:padding="30dp"
+        android:visibility="gone"
         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvWishlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/personalBtns"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:visibility="visible"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBooks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/personalBtns"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:visibility="gone"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBorrowed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/personalBtns"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:visibility="gone"
+        />
+
+
 
 
 </RelativeLayout>

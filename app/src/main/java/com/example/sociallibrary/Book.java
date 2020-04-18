@@ -1,13 +1,15 @@
 package com.example.sociallibrary;
 
-import com.google.android.gms.maps.model.LatLng;
+import java.util.HashMap;
+
+import static java.lang.Double.valueOf;
 
 public class Book {
 
     private String id;
     private String name;
     private String author;
-    private Double rating;
+    private HashMap<String,String> rating;
     private String description;
     private String imgUrl;
     private String genre;
@@ -16,11 +18,11 @@ public class Book {
 
     }
 
-    public Book(String id,String name, String author, Double rating, String description, String imgUrl, String genre) {
+    public Book(String id,String name, String author,HashMap<String,String> rating, String description, String imgUrl, String genre) {
         this.name = name;
+        this.rating = rating;
         this.id = id;
         this.author = author;
-        this.rating = rating;
         this.description = description;
         this.imgUrl = imgUrl;
         this.genre=genre;
@@ -38,8 +40,19 @@ public class Book {
         return author;
     }
 
-    public Double getRating() {
-        return rating;
+    public float getRating() {
+        float sum =0;
+        float counter = 0;
+        if (rating==null)
+            return 0;
+        for (HashMap.Entry<String, String> entry : rating.entrySet()) {
+            sum+=Integer.parseInt(entry.getValue());
+            counter++;
+        }
+        if (counter>0)
+            return sum/counter;
+        else
+            return counter;
     }
 
     public String getDescription() {

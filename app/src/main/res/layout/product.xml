@@ -44,19 +44,20 @@
     <RelativeLayout
         android:id="@+id/productMain"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:layout_below="@+id/tvProductName"
         android:paddingHorizontal="10dp"
         >
 
         <RelativeLayout
             android:id="@+id/bookDetails"
-            android:layout_width="170dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="top"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             >
 
             <TextView
@@ -66,26 +67,15 @@
                 android:text="author"
                 android:textColor="@color/text"
                 />
-            <!--
-            <TextView
-                android:id="@+id/tvProductRate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvProductAuthor"
-                android:textColor="@color/text"
-                android:layout_alignParentRight="true"
-                android:paddingRight="15dp"
-                android:text="4.6"/>
-                -->
             <RatingBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvProductRate"
+                android:id="@+id/rbProductRating"
                 android:numStars="5"
-                android:rating="3.5"
+                android:stepSize="0.1"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="1dp"
+                android:layout_centerVertical="true"
                 style="?android:attr/ratingBarStyleSmall"
                 android:progressTint="@color/star"
                 android:layout_alignBottom="@id/tvProductGenre"
@@ -139,32 +129,37 @@
         android:layout_below="@+id/productMain"
         android:baselineAligned="false"
         android:layout_marginTop="10dp"
-        android:background="@drawable/roundedbutton"
+        android:background="#eaeaea"
+
         >
         <LinearLayout
             android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:orientation="vertical"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginHorizontal="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
             >
 
             <ImageButton
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:src="@drawable/wishlist"
-                android:layout_marginHorizontal="5dp"
+                android:id="@+id/btnAddWishlist"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:src="@drawable/iconwishlist"
                 android:scaleType="fitXY"
                 android:background="@drawable/roundedbutton"
                 />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:textColor="@color/btnText"
                 android:padding="3dp"
                 android:text="wishlist"
-                android:textColor="@color/btnText"
-                android:textStyle="bold" />
+                />
 
         </LinearLayout>
 
@@ -172,71 +167,95 @@
 
         <LinearLayout
             android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:orientation="vertical"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginHorizontal="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
             >
             <ImageButton
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:src="@drawable/chaticon"
-                android:layout_marginHorizontal="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:src="@drawable/iconchat"
                 android:scaleType="fitXY"
                 android:background="@drawable/roundedbutton"
-
+                android:id="@+id/btnAddBorrow"
                 />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:textColor="@color/btnText"
                 android:padding="3dp"
                 android:text="borrow"
-                android:textColor="@color/btnText"
-                android:textStyle="bold" />
+                />
 
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:orientation="vertical"
+            android:background="@drawable/roundedbutton"
+            android:layout_marginHorizontal="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
             >
             <ImageButton
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginHorizontal="5dp"
-                android:src="@drawable/mapslogo"
+                android:id="@+id/btn_book_map"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:src="@drawable/iconmap"
                 android:scaleType="fitXY"
                 android:background="@drawable/roundedbutton"
                 />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:textColor="@color/btnText"
                 android:padding="3dp"
                 android:text="map"
-                android:textColor="@color/btnText"
-                android:textStyle="bold" />
+                />
 
         </LinearLayout>
 
 
     </LinearLayout>
-    <RatingBar
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/productBtn"
-        android:numStars="5"
-        android:rating="5"
-        android:layout_centerHorizontal="true"
-        android:progressTint="@color/star"
-        android:progressBackgroundTint="@color/star_back"
-        android:isIndicator="false"
-        android:layout_marginTop="10dp"
-        />
+        android:gravity="center"
+        android:layout_marginTop="10dp">
+        <RatingBar
+            android:id = "@+id/rbProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="5"
+            android:stepSize="1"
+            android:layout_centerHorizontal="true"
+            android:progressTint="@color/star"
+            android:progressBackgroundTint="@color/star_back"
+            android:isIndicator="false"
+            android:layout_marginRight="20dp"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRate"
+            android:text="rate"
+            android:background="@drawable/roundedbutton"
+            android:textColor="@color/btnText"
+            />
+    </LinearLayout>
 
 
 
 </RelativeLayout>
+

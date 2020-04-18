@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android. os.Bundle;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -26,19 +31,25 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Index extends AppCompatActivity implements BookAdapter.OnBookListener  {
+public class Index extends AppCompatActivity implements BookAdapter.OnBookListener ,GenreAdapter.OnGenreListener {
 
     private GoogleSignInClient mGoogleSignInClient;
     public static final String BOOK_ID="id";
 
+    String genre ="All";
+    GenreAdapter genreAdapter;
+
     Button btnPersonal, btnSignOut, btnScan;
-    ImageButton btnMap;
+    ImageButton btnMap, btnSearch;
 
     static final Integer BOOK_LIMIT=20;
     DatabaseReference databaseBooks;
@@ -51,6 +62,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     DatabaseReference databaseGenres;
     ListView listViewGenres;
     List<Genre> genreList;
+    EditText editTextBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +80,13 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnSignOut = findViewById(R.id.btnSignout);
         btnMap = findViewById(R.id.btnMap);
         btnScan = findViewById(R.id.btnScan);
+        btnSearch = findViewById(R.id.btn_search);
+        editTextBook = findViewById(R.id.editTextBook);
 
         btnPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Index.this, com.example.sociallibrary.personal.class);
+                Intent intent = new Intent(Index.this, com.example.sociallibrary.Personal.class);
                 startActivity(intent);
             }
         });
@@ -100,90 +114,28 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             }
         });
 
-        //book list
-        databaseBooks = FirebaseDatabase.getInstance().getReference("books");
-        //listViewBooks = (ListView) findViewById(R.id.bookList);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeKeyboard();
+                Log.d("ido", editTextBook.getText().toString() );
+                searchBook(editTextBook.getText().toString());
+
+            }
+        });
+
+        databaseBooks = FirebaseDatabase.getInstance().getReference();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //create an instance of firebase storage
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+
         bookList=new ArrayList<>();
-
         rvBooks = (RecyclerView) findViewById(R.id.rvBookList);
-
         databaseGenres = FirebaseDatabase.getInstance().getReference("genres");
-        //listViewGenres = (ListView) findViewById(R.id.genreList);
         genreList=new ArrayList<>();
 
         rvGenres = (RecyclerView) findViewById(R.id.rvGenres);
-
-        //this is only for adding example books
-        /**
-         Button btnAdd = (Button) findViewById(R.id.addTemp);
-         btnAdd.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-        addBook();
-        }
-        });
-         //*/
-    }
-
-    /** part od add example
-    private void addBook()
-    {
-        String id = databaseBooks.push().getKey();
-        String name = "b1";
-        String author = "jk";
-        String genre = "scifi";
-        String imgUrl = "@drawable/harry";
-        double rating = 3;
-        String description = "the book is very very very very very very interesting";
-        Book book = new Book(id,name,author,rating,description,imgUrl,genre);
-        databaseBooks.child(id).setValue(book);
-
-        Toast.makeText(this,"added",Toast.LENGTH_LONG).show();
-    }
-    // */
-
-    private void signOut() //sign out method
-    {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(Index.this, "Singed Out successfully", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Index.this, com.example.sociallibrary.MainActivity.class);
-                        startActivity(intent);
-                    }
-                });
-    }
-// TODO: GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity()); //this is how to save account of google in USERS table
-
-    //book list display
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        databaseBooks.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                bookList.clear();
-                int counter=0;
-
-                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
-                Book book = bookSnapshot.getValue(Book.class);
-                bookList.add(book);
-                }
-                BookAdapter adapter = new BookAdapter(bookList, Index.this );
-                //listViewBooks.setAdapter(adapter);
-                rvBooks.setAdapter(adapter);
-
-                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //Toast.makeText(Index.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
         databaseGenres.addValueEventListener(new ValueEventListener() {
             @Override
@@ -197,11 +149,8 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
                     genreList.add(genre);
                 }
-                //GenreList adapter = new GenreList(Index.this, genreList);
-                //listViewGenres.setAdapter(adapter);
-                GenreAdapter adapter = new GenreAdapter( genreList);
-                //listViewBooks.setAdapter(adapter);
-                rvGenres.setAdapter(adapter);
+                genreAdapter = new GenreAdapter(genreList,Index.this);
+                rvGenres.setAdapter(genreAdapter);
 
                 rvGenres.setLayoutManager(new LinearLayoutManager(Index.this,LinearLayoutManager.HORIZONTAL, false));
             }
@@ -211,7 +160,60 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
+
+        updateBooks();
+
     }
+
+    private void signOut() //sign out method
+    {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(Index.this, "Singed Out successfully", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Index.this, com.example.sociallibrary.MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+    }
+// GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity()); //this is how to save account of google in USERS table
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void updateBooks()
+    {
+        Query qBooks = databaseBooks.child("books");
+        qBooks.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                bookList.clear();
+
+                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
+                {
+                    Book book = bookSnapshot.getValue(Book.class);
+                    if (genre.equals("All"))
+                        bookList.add(book);
+                    else if(book.getGenre().equals(genre))
+                        bookList.add(book);
+                }
+                BookAdapter adapter = new BookAdapter(bookList, Index.this );
+                rvBooks.setAdapter(adapter);
+
+                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     @Override
     public void onBookClick(int position) {
@@ -220,7 +222,43 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         intent.putExtra(BOOK_ID,bookList.get(position).getId());
 
         startActivity(intent);
+    }
 
-        Toast.makeText(this,bookList.get(position).getId(),Toast.LENGTH_LONG).show();
+    @Override
+    public void onGenreClick(int position) {
+        genre=genreList.get(position).getGenreName();
+        updateBooks();
+    }
+    public void searchBook(final String bookName)
+    {
+        bookList.clear();
+        Query qSearch = databaseBooks.child("books");
+        qSearch.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
+                {
+                    Book book = bookSnapshot.getValue(Book.class);
+                    if (book.getName().toLowerCase().equals(bookName.toLowerCase())) {
+                        bookList.add(book);
+                    }
+                }
+                BookAdapter adapter = new BookAdapter(bookList, Index.this );
+                rvBooks.setAdapter(adapter);
+                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+    private void closeKeyboard(){
+        View view = getCurrentFocus();
+        if(view != null){
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
+

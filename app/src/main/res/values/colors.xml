@@ -10,6 +10,7 @@
     <color name="text">#000000</color>
     <color name="btn">#006EBF</color>
     <color name="btnText">#fff</color>
+    <color name="btnPress">#003C68</color>
     <color name="star">#FFEB3B</color>
     <color name="star_back">#575655</color>
 

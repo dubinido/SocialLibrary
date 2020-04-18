@@ -1,9 +1,11 @@
 package com.example.sociallibrary;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -14,8 +16,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
+    boolean ans = false;
+
     private static final String TAG = "MyActivity";
     private GoogleSignInClient mGoogleSignInClient;
     @Override
@@ -39,13 +51,25 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+
     }
 
     private void updateUI(GoogleSignInAccount account) {
         if(account != null) {
-            //Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.Index.class);
-            Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.Index.class);
-            startActivity(intent);
+            updateUser(account.getId());
+            /*Log.e("barak", account.getId());
+            Log.e("barak", String.valueOf(isSigned(account.getId())));
+
+            if(isSigned(account.getId()))
+            {
+                Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.Index.class);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.HomeLocationActivity.class);
+                startActivity(intent);
+            } */
         }
     }
 
@@ -75,6 +99,44 @@ public class MainActivity extends AppCompatActivity {
             updateUI(null);
         }
     }
+     private void isSigned (String id)
+     {
+         Log.d("TAG", "ans final "+ans);
+         //return updateUser(id);
+
+     }
+
+     private void updateUser(final String id){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+         ref.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot dataSnapshot) {
+                 Log.d("TAG", "onDataChange:before if ");
+                 ans = false;
+                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                     Log.d("TAG", userSnapshot.getKey());
+                     Log.d("TAG", "ans "+ans);
+                     if (userSnapshot.getKey().equals(id))
+                     {
+                         Log.d("TAG", "onDataChange:true ");
+                         ans = true;
+                         Log.d("TAG", "ans "+ans);
+                         Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.Index.class);
+                         startActivity(intent);
+
+
+                     }
+                 }
+             }
+             @Override
+             public void onCancelled(DatabaseError databaseError) {
+             }
+         });
+
+         Intent intent = new Intent(MainActivity.this, com.example.sociallibrary.HomeLocationActivity.class);
+         startActivity(intent);
+     }
+
 }
 
 

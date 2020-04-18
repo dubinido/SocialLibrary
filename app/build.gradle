@@ -57,5 +57,9 @@ dependencies {
     //picasso loading images from web
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //firebase storage
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+    // FirebaseUI Storage only
+    implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
 
 }

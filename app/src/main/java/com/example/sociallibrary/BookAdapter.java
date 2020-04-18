@@ -1,14 +1,28 @@
 package com.example.sociallibrary;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.ViewTarget;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,7 +45,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         // for any view that will be set as you render a row
         TextView bookName;
         TextView bookAuthor;
-        TextView bookRating;
+        RatingBar bookRating;
         TextView bookGenre;
         ImageView bookImg;
         OnBookListener onBookListener;
@@ -45,7 +59,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
 
             bookName = (TextView) itemView.findViewById(R.id.bookName);
             bookAuthor=(TextView) itemView.findViewById(R.id.bookAuthor);
-            bookRating=(TextView) itemView.findViewById(R.id.bookRating);
+            bookRating=(RatingBar) itemView.findViewById(R.id.bookRating);
             bookGenre=(TextView) itemView.findViewById(R.id.bookGenre);
             bookImg=(ImageView) itemView.findViewById(R.id.bookImg);
 
@@ -75,19 +89,38 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
     // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(BookAdapter.ViewHolder viewHolder, int position) {
+        final long ONE_MEGABYTE = 1024 * 1024;
+
         // Get the data model based on position
         Book book = books.get(position);
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference()
+                .child(book.getImgUrl());//"think_fast_think_slow.jpg");
 
         TextView bookName=viewHolder.bookName;
         bookName.setText(book.getName());
         TextView bookAuthor=viewHolder.bookAuthor;
         bookAuthor.setText(book.getAuthor());
-        TextView bookRating=viewHolder.bookRating;
-        bookRating.setText(book.getRating().toString());
+        RatingBar bookRating=viewHolder.bookRating;
+        bookRating.setRating(book.getRating());
         TextView bookGenre=viewHolder.bookGenre;
         bookGenre.setText(book.getGenre());
-        //image need to see what
-        //ImageView bookImg=viewHolder.bookImg;
+        final ImageView bookImg=viewHolder.bookImg;
+        // putting the image from the firebase
+
+        storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "think_fast_think_slow.jpg" is returns, use this as needed
+                Bitmap bmp= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                bookImg.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("Error", ""+exception);
+            }
+        });
 
     }
 

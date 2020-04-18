@@ -42,17 +42,7 @@
 
     </RelativeLayout>
 
-    <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/magnifier"
-        android:layout_alignRight="@id/editTextBook"
-        android:layout_alignBottom="@id/editTextBook"
-        android:scaleType="fitXY"
-        android:background="@color/colorPrimary"
-        android:padding="15dp"
-        android:alpha="0.55"
-        />
+
 
     <EditText
         android:id="@+id/editTextBook"
@@ -65,11 +55,24 @@
         android:layout_marginBottom="20dp"
         android:hint="enter book's name"
         android:paddingLeft="20dp"
-        android:textColor="@color/btnText"
+        android:textColor="#FF000000"
         android:textColorHint="#8c000000"
         android:textSize="24dp"
         android:paddingVertical="19dp"
         android:background="@drawable/outline_search_bar"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/magnifier"
+        android:layout_alignRight="@id/editTextBook"
+        android:layout_alignBottom="@id/editTextBook"
+        android:scaleType="fitXY"
+        android:background="#00000000"
+        android:padding="15dp"
+        android:alpha="0.55"
         />
 
 

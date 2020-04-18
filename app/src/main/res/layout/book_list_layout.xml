@@ -8,14 +8,14 @@
     android:padding="10dp">
     <ImageView
         android:id="@+id/bookImg"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        android:src="@drawable/mapslogo"
+        android:layout_width="65dp"
+        android:layout_height="80dp"
+        android:src="@drawable/icon_book"
         android:scaleType="fitXY"
         />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         >
@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:text="book name"
             android:textColor="#000"
+            style="@style/TextAppearance.AppCompat.Large"
             />
         <TextView
             android:id="@+id/bookAuthor"
@@ -33,22 +34,37 @@
             android:layout_height="wrap_content"
             android:text="author"
             android:textColor="#838383"
+            android:layout_marginTop="5dp"
             />
-        <TextView
-            android:id="@+id/bookRating"
+        <RelativeLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="rating"
-            android:textColor="#838383"
-            />
+            >
+            <TextView
+                android:id="@+id/bookGenre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="genre"
+                android:textColor="#838383"
+                />
 
-        <TextView
-            android:id="@+id/bookGenre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="rating"
-            android:textColor="#838383"
-            />
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bookRating"
+                android:numStars="5"
+                android:stepSize="0.1"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:progressTint="@color/star"
+                android:isIndicator="true"
+                android:progressBackgroundTint="@color/star_back"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
 
 
     </LinearLayout>
