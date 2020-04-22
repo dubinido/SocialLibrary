@@ -7,15 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android. os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -45,6 +48,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
     private GoogleSignInClient mGoogleSignInClient;
     public static final String BOOK_ID="id";
+    double minRate=0;
 
     String genre ="All";
     GenreAdapter genreAdapter;
@@ -52,9 +56,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     Button btnPersonal, btnSignOut, btnScan;
     ImageButton btnMap, btnSearch;
 
-    static final Integer BOOK_LIMIT=20;
     DatabaseReference databaseBooks;
-    ListView listViewBooks;
     List<Book> bookList;
 
     RecyclerView rvBooks;
@@ -86,6 +88,10 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnSearch = findViewById(R.id.btn_search);
         editTextBook = findViewById(R.id.editTextBook);
         spinnerRating=findViewById(R.id.spinnerRate);
+
+        spinnerRating.setSelection(0, true);
+        View v = spinnerRating.getSelectedView();
+        ((TextView)v).setTextColor(Color.BLACK);
 
         btnPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +170,20 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
+        spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String txt=String.valueOf(parent.getItemAtPosition(position));
+                ((TextView) view).setTextColor(Color.BLACK);
+                minRate = Double.parseDouble(txt);
+                updateBooks();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         updateBooks();
     }
 
@@ -198,10 +218,12 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
                 {
                     Book book = bookSnapshot.getValue(Book.class);
-                    if (genre.equals("All"))
-                        bookList.add(book);
-                    else if(book.getGenre().equals(genre))
-                        bookList.add(book);
+                    if (book.getRating()>=minRate) {
+                        if (genre.equals("All"))
+                            bookList.add(book);
+                        else if (book.getGenre().equals(genre))
+                            bookList.add(book);
+                    }
                 }
                 BookAdapter adapter = new BookAdapter(bookList, Index.this );
                 rvBooks.setAdapter(adapter);
