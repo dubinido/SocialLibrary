@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -64,6 +65,8 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     List<Genre> genreList;
     EditText editTextBook;
 
+    Spinner spinnerRating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnScan = findViewById(R.id.btnScan);
         btnSearch = findViewById(R.id.btn_search);
         editTextBook = findViewById(R.id.editTextBook);
+        spinnerRating=findViewById(R.id.spinnerRate);
 
         btnPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,9 +164,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
-
         updateBooks();
-
     }
 
     private void signOut() //sign out method
