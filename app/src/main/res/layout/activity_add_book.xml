@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:scrollbars="vertical"
+        tools:context=".AddBook"
+         android:orientation="vertical"
+        android:background="#fff">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/addReturn"
+            android:text="return"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="15dp"
+        android:text="insert a book"
+        android:gravity="center"
+        android:textSize="48dp"
+        android:textColor="@color/text"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_margin="15dp"
+        android:textColorHint="#8E8E8E"
+        android:textSize="24dp"
+        android:hint="isbn"
+        android:textColor="@color/text"
+        android:id="@+id/addIsbn"
+        />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="15dp"
+            android:text="submit"
+            android:id="@+id/addSubmit"
+            android:textSize="24dp"
+
+            />
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="15dp"
+        android:textColorHint="#8E8E8E"
+        android:textSize="24dp"
+        android:hint="name"
+        android:textColor="@color/text"
+        android:id="@+id/addName"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="15dp"
+        android:textColorHint="#8E8E8E"
+        android:textSize="24dp"
+        android:hint="author"
+        android:textColor="@color/text"
+        android:id="@+id/addAuthor"
+        />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="15dp"
+        android:textSize="24dp"
+        android:background="#000"
+        android:id="@+id/addSpinner"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textColorHint="#8E8E8E"
+        android:textSize="24dp"
+        android:hint="description"
+        android:minHeight="60dp"
+        android:id="@+id/addDesc"
+        android:textColor="@color/text"
+        />
+    </LinearLayout>
+
+
+</ScrollView>

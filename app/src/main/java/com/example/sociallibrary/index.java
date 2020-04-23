@@ -119,8 +119,13 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(Index.this, com.example.sociallibrary.AddBook.class);
+                startActivity(intent);
+                /* to add books
                 Intent intent = new Intent(Index.this, com.example.sociallibrary.ScanActivity.class);
                 startActivity(intent);
+
+                 */
             }
         });
 
