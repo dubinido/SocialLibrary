@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -41,7 +42,7 @@ public class Product extends AppCompatActivity {
     GoogleSignInAccount acct;
 
     TextView tvProductId;
-    TextView tvProductName;
+    TextView tvProductName,tvProductDescription;
     TextView tvProductAuthor;
     RatingBar rbProductRating;
     TextView tvProductGenre;
@@ -50,6 +51,7 @@ public class Product extends AppCompatActivity {
     ImageButton btnWishlist,btnBookMap;
     ImageButton btnBorrow;
     AlertDialog dialog;
+    ImageView imgProductImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +71,10 @@ public class Product extends AppCompatActivity {
         tvProductGenre = (TextView) findViewById(R.id.tvProductGenre);
         btnCloseProduct = (Button) findViewById(R.id.btnCloseProduct);
         btnRate = (Button) findViewById(R.id.btnRate);
+        tvProductDescription=(TextView) findViewById(R.id.tvProductDescription);
 
         rbProduct = (RatingBar) findViewById(R.id.rbProduct);
+        imgProductImg = (ImageView) findViewById(R.id.tvProductImg);
 
         btnWishlist = (ImageButton) findViewById(R.id.btnAddWishlist);
         btnWishlist.setOnClickListener(new View.OnClickListener() {
@@ -106,11 +110,14 @@ public class Product extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot bookSnapshot) {
                 Book book = bookSnapshot.getValue(Book.class);
+                book.setImgUrl();
                 tvProductName.setText(book.getName());
                 tvProductAuthor.setText(book.getAuthor());
                 tvProductGenre.setText(book.getGenre());
                 rbProductRating.setRating(book.getRating());
-
+                tvProductDescription.setText(book.getDescription());
+                Log.d("book_cover_product", ""+book.getImgUrl()+", "+book.getName());
+                Picasso.get().load(book.getImgUrl()).error(R.drawable.icon_book).into(imgProductImg);
             }
 
             @Override

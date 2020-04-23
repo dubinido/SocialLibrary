@@ -99,6 +99,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
             ivPersonImg.setImageResource(R.drawable.profile_pic);
         else
             Picasso.get().load(userImg).into(ivPersonImg);
+        Log.d("user_img",userImg);
 
         btnMain.setOnClickListener(new View.OnClickListener() {
             @Override

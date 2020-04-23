@@ -93,10 +93,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
 
         // Get the data model based on position
         Book book = books.get(position);
-
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference()
-                .child(book.getImgUrl());//"think_fast_think_slow.jpg");
-
+        book.setImgUrl();
         TextView bookName=viewHolder.bookName;
         bookName.setText(book.getName());
         TextView bookAuthor=viewHolder.bookAuthor;
@@ -105,9 +102,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         bookRating.setRating(book.getRating());
         TextView bookGenre=viewHolder.bookGenre;
         bookGenre.setText(book.getGenre());
-        final ImageView bookImg=viewHolder.bookImg;
-        // putting the image from the firebase
+        ImageView bookImg=viewHolder.bookImg;
 
+        Log.d("book_cover", ""+book.getImgUrl());
+        Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(bookImg);
+
+/*
         storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -121,6 +121,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
                 Log.d("Error", ""+exception);
             }
         });
+
+ */
 
     }
 

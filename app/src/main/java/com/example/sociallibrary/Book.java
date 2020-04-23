@@ -18,13 +18,13 @@ public class Book {
 
     }
 
-    public Book(String id,String name, String author,HashMap<String,String> rating, String description, String imgUrl, String genre) {
+    public Book(String id,String name, String author,HashMap<String,String> rating, String description, String genre) {
         this.name = name;
         this.rating = rating;
         this.id = id;
         this.author = author;
         this.description = description;
-        this.imgUrl = imgUrl;
+        this.imgUrl = "http://covers.openlibrary.org/b/isbn/"+id+"-S.jpg";
         this.genre=genre;
     }
 
@@ -65,5 +65,9 @@ public class Book {
 
     public String getGenre() {
         return genre;
+    }
+
+    public void setImgUrl() {
+        this.imgUrl ="https://covers.openlibrary.org/b/isbn/"+id+"-M.jpg";
     }
 }

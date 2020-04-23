@@ -51,7 +51,7 @@
 
         <RelativeLayout
             android:id="@+id/bookDetails"
-            android:layout_width="190dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="top"
@@ -109,7 +109,6 @@
             android:id="@+id/tvProductImg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/mapslogo"
             android:layout_toRightOf="@+id/bookDetails"
             android:layout_marginRight="10dp"
             android:scaleType="fitXY"

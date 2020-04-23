@@ -136,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    //TODO: barak - marker.getTag() return the userKey, do your on click herhe
+                    //TODO: izo-fix the crash on yourself
                     Log.d("ido", "user name is " + marker.getTag());
                     Intent intent = new Intent(MapsActivity.this,UserBookBorrow.class);
                     intent.putExtra(USER_ID,marker.getTag().toString());

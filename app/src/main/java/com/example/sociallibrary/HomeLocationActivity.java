@@ -144,6 +144,7 @@ public class HomeLocationActivity extends FragmentActivity implements OnMapReady
                     .title("My Home");//this is how to put icon for book
             mMap.addMarker(markerOptions);
             btnV.setVisibility(View.VISIBLE);
+            closeKeyboard();
         }
 
     }
@@ -168,6 +169,7 @@ public class HomeLocationActivity extends FragmentActivity implements OnMapReady
             mMap.moveCamera(CameraUpdateFactory.newLatLng(israelLatLng));
         init();
     }
+
 
 
 }
