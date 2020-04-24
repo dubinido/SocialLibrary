@@ -13,6 +13,7 @@ public class Book {
     private String description;
     private String imgUrl;
     private String genre;
+    private String user;
 
     public Book() {
 
@@ -26,6 +27,7 @@ public class Book {
         this.description = description;
         this.imgUrl = "http://covers.openlibrary.org/b/isbn/"+id+"-S.jpg";
         this.genre=genre;
+        this.user="";
     }
 
     public String getId() {
@@ -69,5 +71,13 @@ public class Book {
 
     public void setImgUrl() {
         this.imgUrl ="https://covers.openlibrary.org/b/isbn/"+id+"-M.jpg";
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getUser() {
+        return user;
     }
 }

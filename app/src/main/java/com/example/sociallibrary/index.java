@@ -41,14 +41,19 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 
 public class Index extends AppCompatActivity implements BookAdapter.OnBookListener ,GenreAdapter.OnGenreListener {
 
     private GoogleSignInClient mGoogleSignInClient;
     public static final String BOOK_ID="id";
+    public static final String BOOK_ISBN="isbn";
+    public static final String USER_ID="userId";
     double minRate=0;
+    HashMap<String,String> listNames;//in check
 
     String genre ="All";
     GenreAdapter genreAdapter;
@@ -189,7 +194,9 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
-        updateBooks();
+        listNames=new HashMap<>();
+        getListOfBooks();
+
     }
 
     private void signOut() //sign out method
@@ -223,11 +230,14 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
                 {
                     Book book = bookSnapshot.getValue(Book.class);
-                    if (book.getRating()>=minRate) {
-                        if (genre.equals("All"))
-                            bookList.add(book);
-                        else if (book.getGenre().equals(genre))
-                            bookList.add(book);
+                    if (listNames.keySet().contains(book.getId())) {
+                        if (book.getRating() >= minRate) {
+                            book.setUser(listNames.get(book.getId()));
+                            if (genre.equals("All"))
+                                bookList.add(book);
+                            else if (book.getGenre().equals(genre))
+                                bookList.add(book);
+                        }
                     }
                 }
                 BookAdapter adapter = new BookAdapter(bookList, Index.this );
@@ -243,13 +253,11 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         });
     }
 
-
     @Override
     public void onBookClick(int position) {
         Intent intent = new Intent(getApplicationContext(),Product.class);
-
         intent.putExtra(BOOK_ID,bookList.get(position).getId());
-
+        intent.putExtra(USER_ID,bookList.get(position).getUser());
         startActivity(intent);
     }
 
@@ -289,5 +297,31 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    private void getListOfBooks(){
+        listNames.clear();
+        Query qUsers = databaseBooks.child("users");
+        qUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnap : dataSnapshot.getChildren())
+                {
+                    User user = userSnap.getValue(User.class);
+                    List<String> keys = new ArrayList<>();
+                    keys.addAll(user.getBooks().keySet());
+                    for (int counter = 0; counter < keys.size(); counter++) {
+                        listNames.put(keys.get(counter),user.getId());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        updateBooks();
+    }
+
 }
 

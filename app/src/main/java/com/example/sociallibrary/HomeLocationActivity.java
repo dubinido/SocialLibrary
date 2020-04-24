@@ -83,6 +83,7 @@ public class HomeLocationActivity extends FragmentActivity implements OnMapReady
                 databaseBooks.child("users").child(userId).child("wishlist").child("NotABook").setValue("1");
                 databaseBooks.child("users").child(userId).child("books").child("NotABook").setValue("1");
                 databaseBooks.child("users").child(userId).child("borrowed").child("NotABook").setValue("1");
+                databaseBooks.child("users").child(userId).child("id").setValue(userId);
                 storageReference.child("users");
                 
                 Intent intent = new Intent(HomeLocationActivity.this, com.example.sociallibrary.Index.class);

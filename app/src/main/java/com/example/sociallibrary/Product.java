@@ -37,7 +37,7 @@ import static com.example.sociallibrary.MapsActivity.currentLocation;
 public class Product extends AppCompatActivity {
     Book book;
     DatabaseReference databaseBooks;
-    String id;
+    String id,userBookId;
     String userId;
     GoogleSignInAccount acct;
 
@@ -59,8 +59,10 @@ public class Product extends AppCompatActivity {
         setContentView(R.layout.product);
 
         Intent intent = getIntent();
-
         id = intent.getStringExtra(Index.BOOK_ID);
+        userBookId = intent.getStringExtra(Index.USER_ID);
+
+        Toast.makeText(this,userBookId,Toast.LENGTH_LONG).show();
 
         databaseBooks = FirebaseDatabase.getInstance().getReference();
         acct = GoogleSignIn.getLastSignedInAccount(this); //this is how to save account of google in USERS table
@@ -81,6 +83,7 @@ public class Product extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addToWishlist();
+                Toast.makeText(Product.this,"added to wishlist",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -96,7 +99,11 @@ public class Product extends AppCompatActivity {
         btnBookMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeBook();
+                //closeBook();
+                //dubin?
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                intent.putExtra(Index.BOOK_ISBN,id);
+                startActivity(intent);
             }
         });
     }

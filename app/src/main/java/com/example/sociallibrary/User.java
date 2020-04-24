@@ -11,6 +11,7 @@ public class User {
     HashMap<String, String> books;
     HashMap<String, String> wishlist;
     HashMap<String, String> borrowed;
+    String id;
 
     public User() {
     }
@@ -20,7 +21,7 @@ public class User {
         this.lng = lng;
     }
 
-    public User(String userName,String imgUrl, double lat, double lng, HashMap<String, String> books, HashMap<String, String> wishlist, HashMap<String, String> borrowed) {
+    public User(String userName,String imgUrl, double lat, double lng, HashMap<String, String> books, HashMap<String, String> wishlist, HashMap<String, String> borrowed,String id) {
         this.userName = userName;
         this.imgUrl=imgUrl;
         this.lat = lat;
@@ -28,6 +29,7 @@ public class User {
         this.books = books;
         this.wishlist = wishlist;
         this.borrowed = borrowed;
+        this.id = id;
     }
 
     public double getLat() {
@@ -61,5 +63,9 @@ public class User {
 
     public HashMap<String, String> getBorrowed() {
         return borrowed;
+    }
+
+    public String getId() {
+        return id;
     }
 }
