@@ -45,6 +45,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         // for any view that will be set as you render a row
         TextView bookName;
         TextView bookAuthor;
+        TextView bookDistance;
         RatingBar bookRating;
         TextView bookGenre;
         ImageView bookImg;
@@ -62,6 +63,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
             bookRating=(RatingBar) itemView.findViewById(R.id.bookRating);
             bookGenre=(TextView) itemView.findViewById(R.id.bookGenre);
             bookImg=(ImageView) itemView.findViewById(R.id.bookImg);
+            bookDistance=(TextView) itemView.findViewById(R.id.bookDistance);
 
             this.onBookListener=onBookListener;
             itemView.setOnClickListener(this);
@@ -103,26 +105,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         TextView bookGenre=viewHolder.bookGenre;
         bookGenre.setText(book.getGenre());
         ImageView bookImg=viewHolder.bookImg;
+        TextView bookDistance=viewHolder.bookDistance;
+        //bookDistance.setText(book.getDistance()+" km away); todo: dubin add here the the user location
 
         Log.d("book_cover", ""+book.getImgUrl());
         Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(bookImg);
-
-/*
-        storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "think_fast_think_slow.jpg" is returns, use this as needed
-                Bitmap bmp= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                bookImg.setImageBitmap(bmp);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d("Error", ""+exception);
-            }
-        });
-
- */
 
     }
 

@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
 
 
 public class Index extends AppCompatActivity implements BookAdapter.OnBookListener ,GenreAdapter.OnGenreListener {
@@ -52,6 +53,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     public static final String BOOK_ID="id";
     public static final String BOOK_ISBN="isbn";
     public static final String USER_ID="userId";
+    List<Book> dataBooks;
     double minRate=0;
     HashMap<String,String> listNames;//in check
 
@@ -74,10 +76,14 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
     Spinner spinnerRating;
 
+    List<String> isbn;
+    List<User> userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index);
+        dataBooks=new ArrayList<>();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -194,9 +200,10 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
+        isbn = new ArrayList<>();
+        userId = new ArrayList<>();
         listNames=new HashMap<>();
-        getListOfBooks();
-
+        createBooks();
     }
 
     private void signOut() //sign out method
@@ -218,32 +225,17 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         super.onStart();
     }
 
-    private void updateBooks()
+    private void createBooks()
     {
-        Query qBooks = databaseBooks.child("books");
-        qBooks.addValueEventListener(new ValueEventListener() {
+        Query qBook = databaseBooks.child("books");
+        qBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                bookList.clear();
-
-                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                     Book book = bookSnapshot.getValue(Book.class);
-                    if (listNames.keySet().contains(book.getId())) {
-                        if (book.getRating() >= minRate) {
-                            book.setUser(listNames.get(book.getId()));
-                            if (genre.equals("All"))
-                                bookList.add(book);
-                            else if (book.getGenre().equals(genre))
-                                bookList.add(book);
-                        }
-                    }
+                    dataBooks.add(book);
                 }
-                BookAdapter adapter = new BookAdapter(bookList, Index.this );
-                rvBooks.setAdapter(adapter);
-
-                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+                getListOfBooks();
             }
 
             @Override
@@ -253,11 +245,40 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         });
     }
 
+    private void updateBooks()
+    {
+        Log.d("isbn size: ",String.valueOf(isbn.size()));
+        bookList.clear();
+        for (int i=0; i<isbn.size();i++)
+        {
+            for (int j=0; j<dataBooks.size();j++)
+            {
+                Book book=dataBooks.get(j);
+                if (book.getId().equals(isbn.get(i))) {
+                    if (book.getRating() >= minRate) {
+                        book.setUser(userId.get(i));
+                        if (genre.equals("All"))
+                            bookList.add(book);
+                        else if (book.getGenre().equals(genre))
+                            bookList.add(book);
+                    }
+                }
+
+            }
+            bookList=bubbleSort(bookList);
+            for (int k=0; i<bookList.size();i++)
+                Log.d("grade: ",String.valueOf(bookList.get(i).getGrade()));
+            Log.d("booklist 2: ",String.valueOf(bookList.size()));
+            BookAdapter adapter = new BookAdapter(bookList, Index.this );
+            rvBooks.setAdapter(adapter);
+            rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+        }
+    }
     @Override
     public void onBookClick(int position) {
         Intent intent = new Intent(getApplicationContext(),Product.class);
         intent.putExtra(BOOK_ID,bookList.get(position).getId());
-        intent.putExtra(USER_ID,bookList.get(position).getUser());
+        intent.putExtra(USER_ID,bookList.get(position).getUser().getId());
         startActivity(intent);
     }
 
@@ -299,7 +320,8 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     }
 
     private void getListOfBooks(){
-        listNames.clear();
+        isbn.clear();
+        userId.clear();
         Query qUsers = databaseBooks.child("users");
         qUsers.addValueEventListener(new ValueEventListener() {
             @Override
@@ -310,18 +332,33 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                     List<String> keys = new ArrayList<>();
                     keys.addAll(user.getBooks().keySet());
                     for (int counter = 0; counter < keys.size(); counter++) {
-                        listNames.put(keys.get(counter),user.getId());
+                        isbn.add(keys.get(counter));
+                        userId.add(user);
                     }
                 }
+                updateBooks();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-        updateBooks();
+
     }
 
+    private List<Book> bubbleSort(List<Book> arr) {
+        int i, j;
+        for (i = 0; i < arr.size() - 1; i++) {
+            for (j = 0; j < arr.size() - i - 1; j++) {
+                if (arr.get(j).comapare(arr.get(j+1))<0)
+                {
+                    Book temp = arr.get(j);
+                    arr.set(j,arr.get(j+1));
+                    arr.set(j+1,temp);
+                }
+            }
+        }
+        return arr;
+    }
 }
 

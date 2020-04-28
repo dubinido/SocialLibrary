@@ -1,5 +1,10 @@
 package com.example.sociallibrary;
 
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import static java.lang.Double.valueOf;
@@ -13,7 +18,7 @@ public class Book {
     private String description;
     private String imgUrl;
     private String genre;
-    private String user;
+    private User user;
 
     public Book() {
 
@@ -27,7 +32,7 @@ public class Book {
         this.description = description;
         this.imgUrl = "http://covers.openlibrary.org/b/isbn/"+id+"-S.jpg";
         this.genre=genre;
-        this.user="";
+        this.user=null;
     }
 
     public String getId() {
@@ -73,11 +78,49 @@ public class Book {
         this.imgUrl ="https://covers.openlibrary.org/b/isbn/"+id+"-M.jpg";
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
+
+    public double getDistance(com.google.android.gms.maps.model.LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+        tvUserDistance.setText(new DecimalFormat("##.#").format(Radius*c)+" Km");
+    }
+
+    public double getGrade()
+    {
+        double grade = this.getRating()+(5/this.getDistance());
+    }
+
+
+    public double comapare(Book book)
+    {
+        double grade1=this.getGrade();
+        double grade2=book.getGrade();
+        return grade1-grade2;
+    }
+
 }
