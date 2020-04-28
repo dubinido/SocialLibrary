@@ -2,16 +2,24 @@ package com.example.sociallibrary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android. os.Bundle;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -47,18 +56,20 @@ import java.util.Set;
 import java.util.SortedMap;
 
 
-public class Index extends AppCompatActivity implements BookAdapter.OnBookListener ,GenreAdapter.OnGenreListener {
+public class Index extends AppCompatActivity implements BookAdapter.OnBookListener, GenreAdapter.OnGenreListener {
 
     private GoogleSignInClient mGoogleSignInClient;
-    public static final String BOOK_ID="id";
-    public static final String BOOK_ISBN="isbn";
-    public static final String USER_ID="userId";
+    public static final String BOOK_ID = "id";
+    public static final String BOOK_ISBN = "isbn";
+    public static final String USER_ID = "userId";
     List<Book> dataBooks;
-    double minRate=0;
-    HashMap<String,String> listNames;//in check
+    double minRate = 0;
+    HashMap<String, String> listNames;//in check
 
-    String genre ="All";
+    String genre = "All";
     GenreAdapter genreAdapter;
+
+    LatLng userLoc;
 
     Button btnPersonal, btnSignOut, btnScan;
     ImageButton btnMap, btnSearch;
@@ -83,7 +94,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index);
-        dataBooks=new ArrayList<>();
+        dataBooks = new ArrayList<>();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -92,17 +103,19 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
+        // userLoc =
+
         btnPersonal = findViewById(R.id.personalbtn);
         btnSignOut = findViewById(R.id.btnSignout);
         btnMap = findViewById(R.id.btnMap);
         btnScan = findViewById(R.id.btnScan);
         btnSearch = findViewById(R.id.btn_search);
         editTextBook = findViewById(R.id.editTextBook);
-        spinnerRating=findViewById(R.id.spinnerRate);
+        spinnerRating = findViewById(R.id.spinnerRate);
 
         spinnerRating.setSelection(0, true);
         View v = spinnerRating.getSelectedView();
-        ((TextView)v).setTextColor(Color.BLACK);
+        ((TextView) v).setTextColor(Color.BLACK);
 
         btnPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,8 +128,8 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(Index.this, com.example.sociallibrary.MapsActivity.class);
-                    startActivity(intent);
+                Intent intent = new Intent(Index.this, com.example.sociallibrary.MapsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -130,13 +143,12 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Index.this, com.example.sociallibrary.AddBook.class);
-                startActivity(intent);
-                /* to add books
+                //Intent intent = new Intent(Index.this, com.example.sociallibrary.AddBook.class);
+                //startActivity(intent);
+                // to add books
                 Intent intent = new Intent(Index.this, com.example.sociallibrary.ScanActivity.class);
                 startActivity(intent);
 
-                 */
             }
         });
 
@@ -144,9 +156,25 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             @Override
             public void onClick(View v) {
                 closeKeyboard();
-                Log.d("ido", editTextBook.getText().toString() );
+                Log.d("ido", editTextBook.getText().toString());
                 searchBook(editTextBook.getText().toString());
 
+            }
+        });
+
+        editTextBook.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.d("TAG", "onEditorAction: ");
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == KeyEvent.ACTION_DOWN
+                        || actionId == KeyEvent.KEYCODE_ENTER) {
+                    //execute our method for searching
+                    closeKeyboard();
+                    searchBook(editTextBook.getText().toString());
+                }
+                return false;
             }
         });
 
@@ -156,10 +184,10 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
 
-        bookList=new ArrayList<>();
+        bookList = new ArrayList<>();
         rvBooks = (RecyclerView) findViewById(R.id.rvBookList);
         databaseGenres = FirebaseDatabase.getInstance().getReference("genres");
-        genreList=new ArrayList<>();
+        genreList = new ArrayList<>();
 
         rvGenres = (RecyclerView) findViewById(R.id.rvGenres);
 
@@ -169,16 +197,15 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
                 genreList.clear();
 
-                for (DataSnapshot genreSnapshot : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot genreSnapshot : dataSnapshot.getChildren()) {
                     Genre genre = genreSnapshot.getValue(Genre.class);
 
                     genreList.add(genre);
                 }
-                genreAdapter = new GenreAdapter(genreList,Index.this);
+                genreAdapter = new GenreAdapter(genreList, Index.this);
                 rvGenres.setAdapter(genreAdapter);
 
-                rvGenres.setLayoutManager(new LinearLayoutManager(Index.this,LinearLayoutManager.HORIZONTAL, false));
+                rvGenres.setLayoutManager(new LinearLayoutManager(Index.this, LinearLayoutManager.HORIZONTAL, false));
             }
 
             @Override
@@ -189,7 +216,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String txt=String.valueOf(parent.getItemAtPosition(position));
+                String txt = String.valueOf(parent.getItemAtPosition(position));
                 ((TextView) view).setTextColor(Color.BLACK);
                 minRate = Double.parseDouble(txt);
                 updateBooks();
@@ -200,6 +227,22 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
+
+        /** userLoc intial**/
+        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            double latitude=location.getLatitude();
+            double longitude=location.getLongitude();
+            Log.d("old","lat :  "+latitude);
+            Log.d("old","long :  "+longitude);
+            userLoc = new LatLng(latitude,longitude);
+        }
+
+
         isbn = new ArrayList<>();
         userId = new ArrayList<>();
         listNames=new HashMap<>();
@@ -267,9 +310,9 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             }
             bookList=bubbleSort(bookList);
             for (int k=0; i<bookList.size();i++)
-                Log.d("grade: ",String.valueOf(bookList.get(i).getGrade()));
+                Log.d("grade: ",String.valueOf(bookList.get(i).getGrade(userLoc)));
             Log.d("booklist 2: ",String.valueOf(bookList.size()));
-            BookAdapter adapter = new BookAdapter(bookList, Index.this );
+            BookAdapter adapter = new BookAdapter(bookList, Index.this ,userLoc);
             rvBooks.setAdapter(adapter);
             rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
         }
@@ -297,11 +340,11 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 for (DataSnapshot bookSnapshot : dataSnapshot.getChildren())
                 {
                     Book book = bookSnapshot.getValue(Book.class);
-                    if (book.getName().toLowerCase().equals(bookName.toLowerCase())) {
+                    if (book.getName().toLowerCase().contains(bookName.toLowerCase()) || bookName.toLowerCase().contains(book.getName().toLowerCase()) ) {
                         bookList.add(book);
                     }
                 }
-                BookAdapter adapter = new BookAdapter(bookList, Index.this );
+                BookAdapter adapter = new BookAdapter(bookList, Index.this,userLoc );
                 rvBooks.setAdapter(adapter);
                 rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
             }
@@ -348,9 +391,10 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
     private List<Book> bubbleSort(List<Book> arr) {
         int i, j;
+
         for (i = 0; i < arr.size() - 1; i++) {
             for (j = 0; j < arr.size() - i - 1; j++) {
-                if (arr.get(j).comapare(arr.get(j+1))<0)
+                if (arr.get(j).compare(arr.get(j+1),userLoc)<0)
                 {
                     Book temp = arr.get(j);
                     arr.set(j,arr.get(j+1));

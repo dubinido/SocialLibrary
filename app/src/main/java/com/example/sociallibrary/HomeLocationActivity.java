@@ -109,9 +109,9 @@ public class HomeLocationActivity extends FragmentActivity implements OnMapReady
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH
-                    || actionId == EditorInfo.IME_ACTION_DONE
-                    || actionId == KeyEvent.ACTION_DOWN
-                    || actionId == KeyEvent.KEYCODE_ENTER){
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == KeyEvent.ACTION_DOWN
+                        || actionId == KeyEvent.KEYCODE_ENTER){
 
                     //execute our method for searching
                     geoLocate();

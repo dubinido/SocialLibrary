@@ -138,7 +138,10 @@ public class ScanActivity extends AppCompatActivity {
                String id = item.getRawValue();
                bookId=id;
                Toast.makeText(this,bookId,Toast.LENGTH_SHORT).show();
-               showDialog();
+               //showDialog();
+               Intent intent=new Intent(getApplicationContext(),AddBook.class);
+               intent.putExtra("isbn",bookId);
+               startActivity(intent);
 
                break;
 

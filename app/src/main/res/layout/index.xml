@@ -60,6 +60,8 @@
         android:textSize="24dp"
         android:paddingVertical="19dp"
         android:background="@drawable/outline_search_bar"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
         />
 
     <ImageButton

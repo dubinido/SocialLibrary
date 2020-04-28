@@ -86,12 +86,13 @@ public class Book {
         return user;
     }
 
-    public double getDistance(com.google.android.gms.maps.model.LatLng StartP, LatLng EndP) {
+    public double getDistance(LatLng StartP) {
+        LatLng bookLoc = this.getUser().getLocation();
         int Radius = 6371;// radius of earth in Km
         double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
+        double lat2 = bookLoc.latitude;
         double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
+        double lon2 = bookLoc.longitude;
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
@@ -107,19 +108,21 @@ public class Book {
         int meterInDec = Integer.valueOf(newFormat.format(meter));
         Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
                 + " Meter   " + meterInDec);
-        tvUserDistance.setText(new DecimalFormat("##.#").format(Radius*c)+" Km");
+        Log.i("KM", String.valueOf(km));
+        return km;
     }
 
-    public double getGrade()
+   public double getGrade(LatLng userLoc)
     {
-        double grade = this.getRating()+(5/this.getDistance());
+        double grade = this.getRating()+(5/this.getDistance(userLoc));
+        return grade;
     }
 
 
-    public double comapare(Book book)
+    public double compare(Book book,LatLng userLoc)
     {
-        double grade1=this.getGrade();
-        double grade2=book.getGrade();
+        double grade1=this.getGrade(userLoc);
+        double grade2=book.getGrade(userLoc);
         return grade1-grade2;
     }
 

@@ -1,14 +1,19 @@
 package com.example.sociallibrary;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -40,13 +46,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener{
+public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener, MyBookAdapter.OnBookListener{
 
     private GoogleSignInClient mGoogleSignInClient;
     Button btnMain, btnSignOut;
     TextView tvHelloUser;
     ImageView ivPersonImg;
     String userName,userImg, userId;
+
+    LatLng userLoc;
 
     static final Integer BOOK_LIMIT = 20;
     DatabaseReference databaseBooks;
@@ -122,6 +130,20 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
         wishlist = new ArrayList<>();
         borrowed = new ArrayList<>();
         updateBooks2();
+
+        /** userLoc intial**/
+        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            double latitude=location.getLatitude();
+            double longitude=location.getLongitude();
+            Log.d("old","lat :  "+latitude);
+            Log.d("old","long :  "+longitude);
+            userLoc = new LatLng(latitude,longitude);
+        }
 
     }
 
@@ -294,15 +316,15 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                             borrowed.add(book);
                     }
 
-                    BookAdapter adapterWishlist = new BookAdapter(wishlist, Personal.this);
+                    BookAdapter adapterWishlist = new BookAdapter(wishlist, Personal.this,userLoc);
                     rvWishlist.setAdapter(adapterWishlist);
                     rvWishlist.setLayoutManager(new LinearLayoutManager(Personal.this));
 
-                    BookAdapter adapterBooks = new BookAdapter(books, Personal.this);
+                    MyBookAdapter adapterBooks = new MyBookAdapter(books, Personal.this,true);
                     rvBooks.setAdapter(adapterBooks);
                     rvBooks.setLayoutManager(new LinearLayoutManager(Personal.this));
 
-                    BookAdapter adapterBorrowed = new BookAdapter(borrowed, Personal.this);
+                    BookAdapter adapterBorrowed = new BookAdapter(borrowed, Personal.this,userLoc);
                     rvBorrowed.setAdapter(adapterBorrowed);
                     rvBorrowed.setLayoutManager(new LinearLayoutManager(Personal.this));
 

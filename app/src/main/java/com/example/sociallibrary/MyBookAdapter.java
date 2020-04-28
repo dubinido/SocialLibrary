@@ -34,17 +34,17 @@ import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
+public class MyBookAdapter extends RecyclerView.Adapter<MyBookAdapter.ViewHolder>
 {
     private List<Book> books;
     private OnBookListener mOnBookListener;
-    private LatLng userLoc;
+    Boolean status;
 
     //constructor
-    public BookAdapter(List<Book> mbooks,OnBookListener onBookListener,LatLng userLoc) {
+    public MyBookAdapter(List<Book> mbooks,OnBookListener onBookListener,Boolean status) {
         this.books = mbooks;
         this.mOnBookListener=onBookListener;
-        this.userLoc=userLoc;
+        this.status=status;
 
     }
 
@@ -60,7 +60,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         TextView bookGenre;
         ImageView bookImg;
         OnBookListener onBookListener;
-        LatLng userLoc;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -89,7 +88,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
     }
 
     @Override
-    public BookAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyBookAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -103,7 +102,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(BookAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(MyBookAdapter.ViewHolder viewHolder, int position) {
         final long ONE_MEGABYTE = 1024 * 1024;
 
         // Get the data model based on position
@@ -119,7 +118,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         bookGenre.setText(book.getGenre());
         ImageView bookImg=viewHolder.bookImg;
         TextView bookDistance=viewHolder.bookDistance;
-        bookDistance.setText(String.valueOf(book.getDistance(userLoc))+" km away");
+        bookDistance.setText(status.toString());
 
         Log.d("book_cover", ""+book.getImgUrl());
         Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(bookImg);

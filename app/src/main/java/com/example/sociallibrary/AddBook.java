@@ -34,7 +34,7 @@ public class AddBook extends AppCompatActivity {
     String[] genres;
     String addGenre;
     Button addSubmit, addReturn;
-    String id;
+    String id, isbn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,11 @@ public class AddBook extends AppCompatActivity {
         addSpinner=(Spinner)findViewById(R.id.addSpinner);
         addSubmit=(Button) findViewById(R.id.addSubmit);
         addReturn=(Button) findViewById(R.id.addReturn);
+
+        Intent intent=getIntent();
+        isbn=intent.getStringExtra("isbn");
+        addIsbn.setText(isbn);
+
 
         dbRef= FirebaseDatabase.getInstance().getReference();
         genreList=new ArrayList<>();

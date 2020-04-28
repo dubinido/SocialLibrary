@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     DatabaseReference databaseBooks;
     List<Book> books;
     List<String> booksIds;
-    public static final String USER_ID="userId";
+    public static final String USER_ID = "userId";
     RecyclerView rvBooks;
     User user;
 
@@ -93,23 +93,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void fetchLastLocation() {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]
-                    {Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+                    {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                    if(location != null)
-                    {
-                        currentLocation = location;
-                        SupportMapFragment supportMapFragment = (SupportMapFragment)
-                                getSupportFragmentManager().findFragmentById(R.id.map);
-                        supportMapFragment.getMapAsync(MapsActivity.this);
-                    }
+                if (location != null) {
+                    currentLocation = location;
+                    SupportMapFragment supportMapFragment = (SupportMapFragment)
+                            getSupportFragmentManager().findFragmentById(R.id.map);
+                    supportMapFragment.getMapAsync(MapsActivity.this);
+                }
             }
         });
     }
@@ -118,11 +116,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.location_icon);
         Bitmap b = bitmapdraw.getBitmap();
-        Bitmap my_smallMarker = Bitmap.createScaledBitmap(b,120,160,false);
+        Bitmap my_smallMarker = Bitmap.createScaledBitmap(b, 120, 160, false);
         mMap = googleMap;
         // this is my current location
         LatLng latLng;
-        if (currentLocation != null){
+        if (currentLocation != null) {
             latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions().position(latLng)
                     .icon(BitmapDescriptorFactory.fromBitmap(my_smallMarker)); //this is how to put icon for book
@@ -135,13 +133,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    //TODO: izo-fix the crash on yourself
                     Log.d("ido", "user name is " + marker.getTag());
-                    Intent intent = new Intent(MapsActivity.this,UserBookBorrow.class);
-                    intent.putExtra(USER_ID,marker.getTag().toString());
-                    intent.putExtra("MyLat",String.valueOf(currentLocation.getLatitude()));
-                    intent.putExtra("MyLng",String.valueOf(currentLocation.getLongitude()));
-                    startActivity(intent);
+                    if (marker.getTag() != null) {
+                        Intent intent = new Intent(MapsActivity.this, UserBookBorrow.class);
+                        intent.putExtra(USER_ID, marker.getTag().toString());
+                        intent.putExtra("MyLat", String.valueOf(currentLocation.getLatitude()));
+                        intent.putExtra("MyLng", String.valueOf(currentLocation.getLongitude()));
+                        startActivity(intent);
+                    }
                     return false;
 
                 }
@@ -157,13 +156,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
                     placeMarker(googleMap, user.getLocation(), user.getUserName(), userSnapshot.getKey());
 
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -171,12 +170,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        switch (requestCode){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
             case REQUEST_CODE:
-                if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fetchLastLocation();
                 }
                 break;
@@ -187,7 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.icon_book_map);
         Bitmap b = bitmapdraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b,120,160,false);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 120, 160, false);
         MarkerOptions markerOptions = new MarkerOptions().position(bookLocation)
                 .title(userName) // sets user name
                 .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)); //this is how to put icon for book
@@ -195,11 +192,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.setTag(userKey);
     }
 
-    public static Location currentLocation()
-    {
+    public static Location currentLocation() {
         return currentLocation;
     }
-
 
 
 }
