@@ -1,20 +1,26 @@
 package com.example.sociallibrary;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,12 +35,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import android.widget.ListView;
@@ -120,7 +130,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Index.this, com.example.sociallibrary.Personal.class);
+                Intent intent = new Intent(Index.this, Personal.class);
                 startActivity(intent);
             }
         });
@@ -128,7 +138,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Index.this, com.example.sociallibrary.MapsActivity.class);
+                Intent intent = new Intent(Index.this, MapsActivity.class);
                 startActivity(intent);
             }
         });
@@ -146,7 +156,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 //Intent intent = new Intent(Index.this, com.example.sociallibrary.AddBook.class);
                 //startActivity(intent);
                 // to add books
-                Intent intent = new Intent(Index.this, com.example.sociallibrary.ScanActivity.class);
+                Intent intent = new Intent(Index.this, ScanActivity.class);
                 startActivity(intent);
 
             }
@@ -211,25 +221,14 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         });
         isbn = new ArrayList<>();
         userId = new ArrayList<>();
-        listNames=new HashMap<>();
+        listNames = new HashMap<>();
         Log.d("barak check1:", "oncreate");
-
-
         createBooks();
 
         /** userLoc intial**/
-        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location != null) {
-            double latitude=location.getLatitude();
-            double longitude=location.getLongitude();
-            Log.d("old","lat :  "+latitude);
-            Log.d("old","long :  "+longitude);
-            userLoc = new LatLng(latitude,longitude);
-        }
+
+        Log.d("barak check2:", "oncreate");
+
         spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
