@@ -180,10 +180,6 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
         databaseBooks = FirebaseDatabase.getInstance().getReference();
 
-        FirebaseStorage storage = FirebaseStorage.getInstance(); //create an instance of firebase storage
-        // Create a storage reference from our app
-        StorageReference storageRef = storage.getReference();
-
         bookList = new ArrayList<>();
         rvBooks = (RecyclerView) findViewById(R.id.rvBookList);
         databaseGenres = FirebaseDatabase.getInstance().getReference("genres");
@@ -213,20 +209,13 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
             }
         });
-        spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String txt = String.valueOf(parent.getItemAtPosition(position));
-                ((TextView) view).setTextColor(Color.BLACK);
-                minRate = Double.parseDouble(txt);
-                updateBooks();
-            }
+        isbn = new ArrayList<>();
+        userId = new ArrayList<>();
+        listNames=new HashMap<>();
+        Log.d("barak check1:", "oncreate");
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        createBooks();
 
         /** userLoc intial**/
         LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -241,12 +230,20 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             Log.d("old","long :  "+longitude);
             userLoc = new LatLng(latitude,longitude);
         }
+        spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String txt = String.valueOf(parent.getItemAtPosition(position));
+                ((TextView) view).setTextColor(Color.BLACK);
+                minRate = Double.parseDouble(txt);
+                updateBooks();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-        isbn = new ArrayList<>();
-        userId = new ArrayList<>();
-        listNames=new HashMap<>();
-        createBooks();
+            }
+        });
     }
 
     private void signOut() //sign out method
@@ -271,6 +268,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     private void createBooks()
     {
         Query qBook = databaseBooks.child("books");
+        Log.d("barak check1:", "create 1");
         qBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -278,6 +276,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                     Book book = bookSnapshot.getValue(Book.class);
                     dataBooks.add(book);
                 }
+                Log.d("barak check1:", "finally");
                 getListOfBooks();
             }
 
@@ -308,11 +307,11 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 }
 
             }
-            bookList=bubbleSort(bookList);
+            //bookList=bubbleSort(bookList);
             for (int k=0; i<bookList.size();i++)
                 Log.d("grade: ",String.valueOf(bookList.get(i).getGrade(userLoc)));
             Log.d("booklist 2: ",String.valueOf(bookList.size()));
-            BookAdapter adapter = new BookAdapter(bookList, Index.this ,userLoc);
+            BookAdapter adapter = new BookAdapter(bookList, Index.this);
             rvBooks.setAdapter(adapter);
             rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
         }
@@ -344,7 +343,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                         bookList.add(book);
                     }
                 }
-                BookAdapter adapter = new BookAdapter(bookList, Index.this,userLoc );
+                BookAdapter adapter = new BookAdapter(bookList, Index.this );
                 rvBooks.setAdapter(adapter);
                 rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
             }
@@ -379,6 +378,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                         userId.add(user);
                     }
                 }
+                Log.d("barak check2:", "finally");
                 updateBooks();
             }
             @Override

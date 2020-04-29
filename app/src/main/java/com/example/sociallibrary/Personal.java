@@ -46,7 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener, MyBookAdapter.OnBookListener{
+public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener{
 
     private GoogleSignInClient mGoogleSignInClient;
     Button btnMain, btnSignOut;
@@ -316,15 +316,15 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                             borrowed.add(book);
                     }
 
-                    BookAdapter adapterWishlist = new BookAdapter(wishlist, Personal.this,userLoc);
+                    BookAdapter adapterWishlist = new BookAdapter(wishlist, Personal.this);
                     rvWishlist.setAdapter(adapterWishlist);
                     rvWishlist.setLayoutManager(new LinearLayoutManager(Personal.this));
 
-                    MyBookAdapter adapterBooks = new MyBookAdapter(books, Personal.this,true);
+                    BookAdapter adapterBooks = new BookAdapter(books, Personal.this);
                     rvBooks.setAdapter(adapterBooks);
                     rvBooks.setLayoutManager(new LinearLayoutManager(Personal.this));
 
-                    BookAdapter adapterBorrowed = new BookAdapter(borrowed, Personal.this,userLoc);
+                    BookAdapter adapterBorrowed = new BookAdapter(borrowed, Personal.this);
                     rvBorrowed.setAdapter(adapterBorrowed);
                     rvBorrowed.setLayoutManager(new LinearLayoutManager(Personal.this));
 

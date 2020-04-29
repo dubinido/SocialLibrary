@@ -38,13 +38,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
 {
     private List<Book> books;
     private OnBookListener mOnBookListener;
-    private LatLng userLoc;
 
     //constructor
-    public BookAdapter(List<Book> mbooks,OnBookListener onBookListener,LatLng userLoc) {
+    public BookAdapter(List<Book> mbooks,OnBookListener onBookListener) {
         this.books = mbooks;
         this.mOnBookListener=onBookListener;
-        this.userLoc=userLoc;
 
     }
 
@@ -60,7 +58,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         TextView bookGenre;
         ImageView bookImg;
         OnBookListener onBookListener;
-        LatLng userLoc;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -119,7 +116,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>
         bookGenre.setText(book.getGenre());
         ImageView bookImg=viewHolder.bookImg;
         TextView bookDistance=viewHolder.bookDistance;
-        bookDistance.setText(String.valueOf(book.getDistance(userLoc))+" km away");
+        //bookDistance.setText(String.valueOf(book.getDistance(userLoc))+" km away");
 
         Log.d("book_cover", ""+book.getImgUrl());
         Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(bookImg);
