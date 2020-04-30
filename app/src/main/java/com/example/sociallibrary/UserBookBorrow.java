@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,7 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
 
-    TextView userName,tvUserDistance;
+    TextView userName,tvUserDistance,tvUserBookBorrowEmpty;
     RecyclerView rvBooks;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
         id = intent.getStringExtra(MapsActivity.USER_ID);
         booksIds = new ArrayList<>();
         books = new ArrayList<>();
-
+        tvUserBookBorrowEmpty = (TextView) findViewById(R.id.tvUserBookBorrowEmpty);
         userName = (TextView) findViewById(R.id.tvUserBookBorrow);
         setName();
         rvBooks = (RecyclerView) findViewById(R.id.rvUserBookBorrow);
@@ -111,7 +112,10 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
                     if (booksIds.contains(book.getId()))
                         books.add(book);
                 }
-
+                if (books.isEmpty())
+                    tvUserBookBorrowEmpty.setVisibility(View.VISIBLE);
+                else
+                    tvUserBookBorrowEmpty.setVisibility(View.GONE);
                 BookAdapter adapterBooks = new BookAdapter(books, UserBookBorrow.this);
                 rvBooks.setAdapter(adapterBooks);
                 rvBooks.setLayoutManager(new LinearLayoutManager(UserBookBorrow.this));

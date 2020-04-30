@@ -66,7 +66,7 @@ import java.util.Set;
 import java.util.SortedMap;
 
 
-public class Index extends AppCompatActivity implements BookAdapter.OnBookListener, GenreAdapter.OnGenreListener {
+public class Index extends AppCompatActivity implements BookAdapter.OnBookListener, GenreAdapter.OnGenreListener,MyBookAdapter.OnBookListener {
 
     private GoogleSignInClient mGoogleSignInClient;
     public static final String BOOK_ID = "id";
@@ -322,7 +322,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             for (int k=0; i<bookList.size();i++)
                 Log.d("grade: ",String.valueOf(bookList.get(i).getGrade(userLoc)));
             Log.d("booklist 2: ",String.valueOf(bookList.size()));
-            BookAdapter adapter = new BookAdapter(bookList, Index.this);
+            MyBookAdapter adapter = new MyBookAdapter(bookList, Index.this,userLoc);
             rvBooks.setAdapter(adapter);
             rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
         }
@@ -354,7 +354,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                         bookList.add(book);
                     }
                 }
-                BookAdapter adapter = new BookAdapter(bookList, Index.this );
+                MyBookAdapter adapter = new MyBookAdapter(bookList, Index.this,userLoc );
                 rvBooks.setAdapter(adapter);
                 rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
             }

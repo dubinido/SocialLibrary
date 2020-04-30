@@ -30,6 +30,20 @@
         android:textSize="20dp"
         android:paddingBottom="15dp"
         />
+    <TextView
+        android:id="@+id/tvUserBookBorrowEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:text="It seems like they don't have any books..."
+        android:textColor="@color/text"
+        android:gravity="center_horizontal"
+        android:textSize="32dp"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="40dp"
+        android:visibility="gone"
+        />
 
 
     <androidx.recyclerview.widget.RecyclerView

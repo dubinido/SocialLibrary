@@ -131,20 +131,6 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
         borrowed = new ArrayList<>();
         updateBooks2();
 
-        /** userLoc intial**/
-        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location != null) {
-            double latitude=location.getLatitude();
-            double longitude=location.getLongitude();
-            Log.d("old","lat :  "+latitude);
-            Log.d("old","long :  "+longitude);
-            userLoc = new LatLng(latitude,longitude);
-        }
-
     }
 
     private void signOut() //sign out method
@@ -269,6 +255,20 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                 btnBorrowed.setBackgroundResource(R.drawable.roundedbuttonpress);
             }
         });
+        if (wishlist.isEmpty())
+        {
+            rvWishlist.setVisibility(View.GONE);
+            tvPersonalEmpty.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            rvWishlist.setVisibility(View.VISIBLE);
+            tvPersonalEmpty.setVisibility(View.GONE);
+        }
+        btnWishlist.setBackgroundResource(R.drawable.roundedbuttonpress);
+        btnBooks.setBackgroundResource(R.drawable.roundedbutton);
+        btnBorrowed.setBackgroundResource(R.drawable.roundedbutton);
     }
     public void updateBooks2() {
         Query createUser = databaseBooks.child("users").child(userId);
