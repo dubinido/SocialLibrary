@@ -49,7 +49,7 @@ public class Product extends AppCompatActivity {
     Button btnCloseProduct,btnRate;
     RatingBar rbProduct;
     ImageButton btnWishlist,btnBookMap;
-    ImageButton btnBorrow;
+    ImageButton btnAddBorrow;
     AlertDialog dialog;
     ImageView imgProductImg;
 
@@ -85,13 +85,6 @@ public class Product extends AppCompatActivity {
             }
         });
 
-        btnBorrow = (ImageButton) findViewById(R.id.btnAddBorrow);
-        btnBorrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         btnBookMap = findViewById(R.id.btn_book_map);
         btnBookMap.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +94,18 @@ public class Product extends AppCompatActivity {
                 //dubin?
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                 intent.putExtra(Index.BOOK_ISBN,id);
+                startActivity(intent);
+            }
+        });
+        btnAddBorrow = findViewById(R.id.btn_Add_Borrow);
+        //Toast.makeText(Product.this, "out", Toast.LENGTH_SHORT).show();
+        btnAddBorrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Product.this, chat.class);
+                intent.putExtra("user1", userId);
+                intent.putExtra("user2",userBookId );
+                intent.putExtra("bookBorrowed", id);
                 startActivity(intent);
             }
         });

@@ -75,7 +75,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     List<Book> dataBooks;
     double minRate = 0;
     HashMap<String, String> listNames;//in check
-
+    String searchBook;
     String genre = "All";
     GenreAdapter genreAdapter;
 
@@ -98,7 +98,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
     Spinner spinnerRating;
 
-    List<String> isbn;
+    List<String> isbn, searchIsbn;
     List<User> userId;
 
     @Override
@@ -106,6 +106,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index);
         dataBooks = new ArrayList<>();
+        searchBook="";
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -167,8 +168,9 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             @Override
             public void onClick(View v) {
                 closeKeyboard();
+                searchBook=editTextBook.getText().toString();
                 Log.d("ido", editTextBook.getText().toString());
-                searchBook(editTextBook.getText().toString());
+                searchBook(searchBook);
 
             }
         });
@@ -223,6 +225,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         isbn = new ArrayList<>();
         userId = new ArrayList<>();
         listNames = new HashMap<>();
+        searchIsbn = new ArrayList<>();
         Log.d("barak check1:", "oncreate");
 
 
@@ -272,12 +275,12 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         super.onStart();
 
         btnLoc.performClick();
-        Log.d("userLoc","second "+userLoc.toString());
         createBooks();
     }
 
     private void createBooks()
     {
+        dataBooks.clear();
         Query qBook = databaseBooks.child("books");
         Log.d("barak check1:", "create 1");
         qBook.addValueEventListener(new ValueEventListener() {
@@ -287,7 +290,8 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                     Book book = bookSnapshot.getValue(Book.class);
                     dataBooks.add(book);
                 }
-                Log.d("barak check1:", "finally");
+                Log.d("barak check1:", String.valueOf(dataBooks.size()));
+
                 getListOfBooks();
             }
 
@@ -300,7 +304,6 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
     private void updateBooks()
     {
-        Log.d("isbn size: ",String.valueOf(isbn.size()));
         bookList.clear();
         for (int i=0; i<isbn.size();i++)
         {
@@ -316,7 +319,6 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                             bookList.add(book);
                     }
                 }
-
             }
             bookList=bubbleSort(bookList);
             for (int k=0; i<bookList.size();i++)
@@ -342,7 +344,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     }
     public void searchBook(final String bookName)
     {
-        bookList.clear();
+        searchIsbn.clear();
         Query qSearch = databaseBooks.child("books");
         qSearch.addValueEventListener(new ValueEventListener() {
             @Override
@@ -351,12 +353,10 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 {
                     Book book = bookSnapshot.getValue(Book.class);
                     if (book.getName().toLowerCase().contains(bookName.toLowerCase()) || bookName.toLowerCase().contains(book.getName().toLowerCase()) ) {
-                        bookList.add(book);
+                        searchIsbn.add(book.getId());
                     }
                 }
-                MyBookAdapter adapter = new MyBookAdapter(bookList, Index.this,userLoc );
-                rvBooks.setAdapter(adapter);
-                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+                getListOfBooks();
             }
 
             @Override
@@ -385,8 +385,18 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                     List<String> keys = new ArrayList<>();
                     keys.addAll(user.getBooks().keySet());
                     for (int counter = 0; counter < keys.size(); counter++) {
-                        isbn.add(keys.get(counter));
-                        userId.add(user);
+                        if (searchBook=="") {
+                            isbn.add(keys.get(counter));
+                            userId.add(user);
+                        }
+                        else
+                        {
+                            if (searchIsbn.contains(keys.get(counter)))
+                            {
+                                isbn.add(keys.get(counter));
+                                userId.add(user);
+                            }
+                        }
                     }
                 }
                 Log.d("barak check2:", "finally");
@@ -428,7 +438,6 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         Location l = gt.getLocation();
         if( l == null){
             Log.d("location :","unable");
-            Toast.makeText(getApplicationContext(),"GPS unable to get Value",Toast.LENGTH_SHORT).show();
         }else {
             double lat = l.getLatitude();
             double lon = l.getLongitude();
@@ -438,4 +447,3 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         }
     }
 }
-

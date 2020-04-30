@@ -181,7 +181,7 @@
                 android:src="@drawable/iconchat"
                 android:scaleType="fitXY"
                 android:background="@drawable/roundedbutton"
-                android:id="@+id/btnAddBorrow"
+                android:id="@+id/btn_Add_Borrow"
                 />
             <TextView
                 android:layout_width="match_parent"

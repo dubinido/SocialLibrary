@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/bookDistance"
-                android:text="distance"
+                android:text=""
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:textColor="#838383"

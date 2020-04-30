@@ -62,4 +62,6 @@ dependencies {
     // FirebaseUI Storage only
     implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
 
+    implementation 'com.firebaseui:firebase-ui-database:4.3.0'
+
 }
