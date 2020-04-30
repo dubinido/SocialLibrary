@@ -1,6 +1,7 @@
 package com.example.sociallibrary;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,7 +39,7 @@ public class chat extends AppCompatActivity {
     private FirebaseListAdapter<ChatMessage> adapter;
     RelativeLayout activity_chat;
     ImageButton fab;
-    String user1, user2, bookBorrowed, userName;
+    String user1, user2, bookBorrowed, userName,userId;
 
 
     @Override
@@ -58,6 +59,7 @@ public class chat extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userName = dataSnapshot.getValue(User.class).getUserName();
+                userId = dataSnapshot.getValue(User.class).getId();
             }
 
             @Override
@@ -71,8 +73,8 @@ public class chat extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText input = findViewById(R.id.input);
-                FirebaseDatabase.getInstance().getReference("chat").child(user1 + "" + user2 + "" +bookBorrowed).push().setValue(
-                        new ChatMessage(input.getText().toString(), userName));
+                FirebaseDatabase.getInstance().getReference("chat").child(user1 + "_" + user2 + "_" +bookBorrowed).push().setValue(
+                        new ChatMessage(input.getText().toString(), userName,userId));
                 input.setText("");
             }
         });
@@ -98,8 +100,8 @@ public class chat extends AppCompatActivity {
         ListView listOfMessage = findViewById(R.id.list_of_message);
 
         //Suppose you want to retrieve "chats" in your Firebase DB:
-        Log.d("TAG", "displayChatMessage:"+ user1 + "" + user2 + "" +bookBorrowed);
-        Query ref = FirebaseDatabase.getInstance().getReference("chat").child(user1 + "" + user2 + "" +bookBorrowed);
+        Log.d("TAG", "displayChatMessage:"+ user1 + "_" + user2 + "_" +bookBorrowed);
+        Query ref = FirebaseDatabase.getInstance().getReference("chat").child(user1 + "_" + user2 + "_" +bookBorrowed);
         //The error said the constructor expected FirebaseListOptions - here you create them:
         FirebaseListOptions<ChatMessage> options =
                 new FirebaseListOptions.Builder<ChatMessage>()
@@ -113,9 +115,16 @@ public class chat extends AppCompatActivity {
             protected void populateView(@NonNull View v, @NonNull ChatMessage model, int position) {
                 // get references to the views of list_views.xml
                 TextView messageText , messageUser, messageTime;
+                RelativeLayout listItem;
                 messageText = v.findViewById(R.id.message_text);
                 messageUser = v.findViewById(R.id.message_user);
                 messageTime = v.findViewById(R.id.message_time);
+
+                listItem = v.findViewById(R.id.list_item);
+
+
+                if (model.getMessageUserId().equals(user1))
+                    listItem.setBackgroundColor(Color.GREEN);
 
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());

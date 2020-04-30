@@ -54,12 +54,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
     ImageView ivPersonImg;
     String userName,userImg, userId;
 
-    LatLng userLoc;
-
-    static final Integer BOOK_LIMIT = 20;
     DatabaseReference databaseBooks;
-
-    Query databaseUsers;
     User user;
     Set<String> wishlistIds;
     Set<String> booksIds;
