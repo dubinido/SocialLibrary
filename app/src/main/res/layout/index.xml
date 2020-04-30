@@ -24,6 +24,8 @@
             android:background="@drawable/roundedbutton"
             android:text="sign out"
             android:textColor="@color/btnText"
+            android:elevation="2dp"
+            android:translationZ="2dp"
             />
 
         <Button
@@ -37,7 +39,9 @@
             android:text="personal"
             android:textColor="@color/btnText"
             tools:layout_editor_absoluteX="301dp"
-            tools:layout_editor_absoluteY="29dp" />
+            tools:layout_editor_absoluteY="29dp"
+            android:elevation="2dp"
+            android:translationZ="2dp"/>
 
 
     </RelativeLayout>
@@ -62,6 +66,7 @@
         android:background="@drawable/outline_search_bar"
         android:imeOptions="actionSearch"
         android:inputType="text"
+
         />
 
     <ImageButton
@@ -175,6 +180,21 @@
 
         />
 
+    <Button
+        android:id="@+id/btnLoc"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="150dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shadow"
+        android:elevation="2dp"
+        android:text="loc"
+        android:textColor="@color/btnText"
+        android:textSize="80px"
+        android:translationZ="2dp"
+        android:visibility="gone" />
 
 
 

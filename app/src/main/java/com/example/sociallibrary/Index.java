@@ -80,6 +80,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     GenreAdapter genreAdapter;
 
     LatLng userLoc;
+    Button btnLoc;
 
     Button btnPersonal, btnSignOut, btnScan;
     ImageButton btnMap, btnSearch;
@@ -223,10 +224,17 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         userId = new ArrayList<>();
         listNames = new HashMap<>();
         Log.d("barak check1:", "oncreate");
-        createBooks();
+
 
         /** userLoc intial**/
-
+        btnLoc = (Button) findViewById(R.id.btnLoc);
+        btnLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeLocation();
+            }
+        });
+        ActivityCompat.requestPermissions(Index.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 123);
         Log.d("barak check2:", "oncreate");
 
         spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -262,6 +270,10 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     @Override
     protected void onStart() {
         super.onStart();
+
+        btnLoc.performClick();
+        Log.d("userLoc","second "+userLoc.toString());
+        createBooks();
     }
 
     private void createBooks()
@@ -306,7 +318,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 }
 
             }
-            //bookList=bubbleSort(bookList);
+            bookList=bubbleSort(bookList);
             for (int k=0; i<bookList.size();i++)
                 Log.d("grade: ",String.valueOf(bookList.get(i).getGrade(userLoc)));
             Log.d("booklist 2: ",String.valueOf(bookList.size()));
@@ -390,18 +402,40 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
 
     private List<Book> bubbleSort(List<Book> arr) {
         int i, j;
+        if(userLoc!=null) {
 
-        for (i = 0; i < arr.size() - 1; i++) {
-            for (j = 0; j < arr.size() - i - 1; j++) {
-                if (arr.get(j).compare(arr.get(j+1),userLoc)<0)
-                {
-                    Book temp = arr.get(j);
-                    arr.set(j,arr.get(j+1));
-                    arr.set(j+1,temp);
+            for (i = 0; i < arr.size() - 1; i++) {
+                for (j = 0; j < arr.size() - i - 1; j++) {
+                    if (arr.get(j).compare(arr.get(j + 1), userLoc) < 0) {
+                        Book temp = arr.get(j);
+                        arr.set(j, arr.get(j + 1));
+                        arr.set(j + 1, temp);
+                    }
                 }
             }
         }
+        else
+        {
+            btnLoc.performClick();
+            bubbleSort(arr);
+        }
         return arr;
+    }
+
+    private void makeLocation()
+    {
+        GpsTracker gt = new GpsTracker(getApplicationContext());
+        Location l = gt.getLocation();
+        if( l == null){
+            Log.d("location :","unable");
+            Toast.makeText(getApplicationContext(),"GPS unable to get Value",Toast.LENGTH_SHORT).show();
+        }else {
+            double lat = l.getLatitude();
+            double lon = l.getLongitude();
+            Log.d("location :","fixed");
+            userLoc=new LatLng(lat,lon);
+            Log.d("userLoc",userLoc.toString());
+        }
     }
 }
 

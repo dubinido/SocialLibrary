@@ -62,8 +62,6 @@ public class Product extends AppCompatActivity {
         id = intent.getStringExtra(Index.BOOK_ID);
         userBookId = intent.getStringExtra(Index.USER_ID);
 
-        Toast.makeText(this,userBookId,Toast.LENGTH_LONG).show();
-
         databaseBooks = FirebaseDatabase.getInstance().getReference();
         acct = GoogleSignIn.getLastSignedInAccount(this); //this is how to save account of google in USERS table
         userId = acct.getId();
