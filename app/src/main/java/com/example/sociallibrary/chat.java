@@ -101,7 +101,7 @@ public class chat extends AppCompatActivity {
 
         //Suppose you want to retrieve "chats" in your Firebase DB:
         Log.d("TAG", "displayChatMessage:"+ user1 + "_" + user2 + "_" +bookBorrowed);
-        Query ref = FirebaseDatabase.getInstance().getReference("chat").child(user1 + "_" + user2 + "_" +bookBorrowed);
+        Query ref = FirebaseDatabase.getInstance().getReference("chat").child(user1 + "_" + user2 + "_" +bookBorrowed).child("chat");
         //The error said the constructor expected FirebaseListOptions - here you create them:
         FirebaseListOptions<ChatMessage> options =
                 new FirebaseListOptions.Builder<ChatMessage>()

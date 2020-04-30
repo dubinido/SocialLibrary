@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="90dp"
+    android:background="#E4E4E4"
+    android:layout_marginVertical="2dp">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:src="@drawable/group_icon"
+        android:id="@+id/chat_icon"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/chat_icon"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:id="@+id/chatUser1"
+            android:textSize="18dp"
+            android:gravity="center_vertical"
+            android:text="user1"
+            android:textColor="#000"
+
+            />
+
+        <TextView
+            android:paddingHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/chatUser2"
+            android:textSize="18dp"
+            android:gravity="center_vertical"
+            android:text="user2"
+            android:textColor="#000"
+
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>
