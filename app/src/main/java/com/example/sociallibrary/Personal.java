@@ -344,6 +344,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
     }
 
     private void updateChat(){
+        chatCons.clear();
         Query getChats = databaseBooks.child("chatCons");
         getChats.addValueEventListener(new ValueEventListener() {
             @Override
@@ -382,7 +383,6 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
         intent.putExtra("user2",chatCons.get(position).getUser2());
         intent.putExtra("bookBorrowed", chatCons.get(position).getIsbn());
         startActivity(intent);
-
 
     }
 

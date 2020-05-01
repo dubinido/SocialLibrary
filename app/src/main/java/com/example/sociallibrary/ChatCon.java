@@ -16,42 +16,15 @@ public class ChatCon {
     private long time;
     private String name1,name2;
 
-    DatabaseReference ref1,ref2;
-
-    public ChatCon(String user1, String user2, String isbn,long time, String chatId,boolean borrow) {
+    public ChatCon(String user1, String user2, String isbn,long time, String chatId,boolean borrow,String name1,String name2) {
         this.user1 = user1;
         this.user2 = user2;
         this.isbn = isbn;
         this.time = time;
         this.chatId = chatId;
         this.borrow = borrow;
-        this.ref1 = FirebaseDatabase.getInstance().getReference("users").child(user1);
-        this.ref2 = FirebaseDatabase.getInstance().getReference("users").child(user1);
-
-        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                name1=user.getUserName();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                name2=user.getUserName();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        this.name1=name1;
+        this.name2 = name2;
     }
 
     public ChatCon() {

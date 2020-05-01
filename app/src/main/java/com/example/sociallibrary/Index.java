@@ -390,19 +390,18 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
                 for (DataSnapshot userSnap : dataSnapshot.getChildren())
                 {
                     User user = userSnap.getValue(User.class);
-                    List<String> keys = new ArrayList<>();
-                    keys.addAll(user.getBooks().keySet());
-                    for (int counter = 0; counter < keys.size(); counter++) {
-                        if (searchBook=="") {
-                            isbn.add(keys.get(counter));
-                            userId.add(user);
-                        }
-                        else
-                        {
-                            if (searchIsbn.contains(keys.get(counter)))
-                            {
+                    if (!user.getId().equals(getUserId())) {
+                        List<String> keys = new ArrayList<>();
+                        keys.addAll(user.getBooks().keySet());
+                        for (int counter = 0; counter < keys.size(); counter++) {
+                            if (searchBook == "") {
                                 isbn.add(keys.get(counter));
                                 userId.add(user);
+                            } else {
+                                if (searchIsbn.contains(keys.get(counter))) {
+                                    isbn.add(keys.get(counter));
+                                    userId.add(user);
+                                }
                             }
                         }
                     }
@@ -456,5 +455,14 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             userLoc=new LatLng(lat,lon);
             Log.d("userLoc",userLoc.toString());
         }
+    }
+    private String getUserId() // return the user ID
+    {
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(Index.this);
+        if (acct != null) {
+            String personGivenId = acct.getId();
+            return personGivenId;
+        }
+        return "";
     }
 }

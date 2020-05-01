@@ -23,6 +23,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,12 +46,19 @@ public class chat extends AppCompatActivity {
     RelativeLayout activity_chat;
     ImageButton fab;
     String user1, user2, bookBorrowed, userName,userId;
+    private GoogleSignInClient mGoogleSignInClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
         activity_chat = findViewById(R.id.activity_chat);
 
@@ -56,19 +67,8 @@ public class chat extends AppCompatActivity {
         user2 = getIntent().getExtras().getString("user2");
         bookBorrowed = getIntent().getExtras().getString("bookBorrowed");
 
-        DatabaseReference user1Ref = FirebaseDatabase.getInstance().getReference("users").child(user1);
-        user1Ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userName = dataSnapshot.getValue(User.class).getUserName();
-                userId = dataSnapshot.getValue(User.class).getId();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
+        userName =getFirstName();
+        userId = getUserId();
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -137,5 +137,26 @@ public class chat extends AppCompatActivity {
         };
         listOfMessage.setAdapter(adapter);
 
+    }
+
+    private String getFirstName() // return the user first name
+    {
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(chat.this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            //String personGivenName = acct.getGivenName();
+            return personName;
+        }
+        return "";
+    }
+
+    private String getUserId() // return the user ID
+    {
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(chat.this);
+        if (acct != null) {
+            String personGivenId = acct.getId();
+            return personGivenId;
+        }
+        return "";
     }
 }

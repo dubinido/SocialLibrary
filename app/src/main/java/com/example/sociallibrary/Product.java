@@ -38,8 +38,8 @@ import static com.example.sociallibrary.MapsActivity.currentLocation;
 public class Product extends AppCompatActivity {
     Book book;
     DatabaseReference databaseBooks;
-    String id,userBookId;
-    String userId;
+    String id,userBookId,userBookName;
+    String userId,userName;
     GoogleSignInAccount acct;
 
     TextView tvProductId;
@@ -66,6 +66,7 @@ public class Product extends AppCompatActivity {
         databaseBooks = FirebaseDatabase.getInstance().getReference();
         acct = GoogleSignIn.getLastSignedInAccount(this); //this is how to save account of google in USERS table
         userId = acct.getId();
+        userName = acct.getDisplayName();
         tvProductName = (TextView) findViewById(R.id.tvProductName);
         tvProductAuthor = (TextView) findViewById(R.id.tvProductAuthor);
         rbProductRating = (RatingBar) findViewById(R.id.rbProductRating);
@@ -103,20 +104,36 @@ public class Product extends AppCompatActivity {
         btnAddBorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String child = userBookId+"_"+userId+"_"+id;
+                String child = userId+"_"+userBookId+"_"+id;
                 databaseBooks.child("chatCons").child(child).child("time").setValue(new Date().getTime());
                 databaseBooks.child("chatCons").child(child).child("chatId").setValue(child);
                 boolean borrow = false;
                 databaseBooks.child("chatCons").child(child).child("borrow").setValue(borrow);
                 databaseBooks.child("chatCons").child(child).child("isbn").setValue(id);
-                databaseBooks.child("chatCons").child(child).child("user2").setValue(userId);
-                databaseBooks.child("chatCons").child(child).child("user1").setValue(userBookId);
+                databaseBooks.child("chatCons").child(child).child("user2").setValue(userBookId);
+                databaseBooks.child("chatCons").child(child).child("user1").setValue(userId);
+                databaseBooks.child("chatCons").child(child).child("name1").setValue(userName);
+                databaseBooks.child("chatCons").child(child).child("name2").setValue(userBookName);
 
                 Intent intent = new Intent(Product.this, chat.class);
                 intent.putExtra("user1", userId);
                 intent.putExtra("user2",userBookId );
                 intent.putExtra("bookBorrowed", id);
                 startActivity(intent);
+            }
+        });
+
+        Query qname = databaseBooks.child("users").child(userBookId);
+        qname.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                userBookName = user.getUserName();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
