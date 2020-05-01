@@ -78,7 +78,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
     String searchBook;
     String genre = "All";
     GenreAdapter genreAdapter;
-
+    int counterLoc=0;
     LatLng userLoc;
     Button btnLoc;
 
@@ -324,9 +324,17 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             for (int k=0; i<bookList.size();i++)
                 Log.d("grade: ",String.valueOf(bookList.get(i).getGrade(userLoc)));
             Log.d("booklist 2: ",String.valueOf(bookList.size()));
-            MyBookAdapter adapter = new MyBookAdapter(bookList, Index.this,userLoc);
-            rvBooks.setAdapter(adapter);
-            rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+            if (userLoc!=null) {
+                MyBookAdapter adapter = new MyBookAdapter(bookList, Index.this, userLoc);
+                rvBooks.setAdapter(adapter);
+                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+            }
+            else {
+                BookAdapter adapter = new BookAdapter(bookList, Index.this);
+                rvBooks.setAdapter(adapter);
+                rvBooks.setLayoutManager(new LinearLayoutManager(Index.this));
+            }
+
         }
     }
     @Override
@@ -426,8 +434,11 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
         }
         else
         {
-            btnLoc.performClick();
-            bubbleSort(arr);
+            if (counterLoc<15) {
+                counterLoc++;
+                btnLoc.performClick();
+                arr =bubbleSort(arr);
+            }
         }
         return arr;
     }

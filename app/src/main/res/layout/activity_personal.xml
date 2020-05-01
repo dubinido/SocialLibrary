@@ -95,7 +95,7 @@
             android:id="@+id/btnBorrowed"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:text="borrowed books"
+            android:text="CHAT"
             android:background="@drawable/roundedbutton"
             android:layout_marginHorizontal="5dp"
             android:textColor="@color/btnText"

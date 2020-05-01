@@ -40,9 +40,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     private OnChatListener mOnChatListener;
 
     //constructor
-    public ChatAdapter(List<Book> mbooks,OnChatListener onChatListener) {
-        this.books = mbooks;
-        this.mOnCharListener=onChatListener;
+    public ChatAdapter(List<ChatCon> mChatCons,OnChatListener onChatListener) {
+        this.chatCons = mChatCons;
+        this.mOnChatListener = onChatListener;
 
     }
 
@@ -61,16 +61,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            user1 = (TextView)
+            user1 = (TextView) itemView.findViewById(R.id.chatUser1);
+            user2 = (TextView) itemView.findViewById(R.id.chatUser2);
+            this.onChatListener = onChatListener;
 
-            bookName = (TextView) itemView.findViewById(R.id.bookName);
-            bookAuthor=(TextView) itemView.findViewById(R.id.bookAuthor);
-            bookRating=(RatingBar) itemView.findViewById(R.id.bookRating);
-            bookGenre=(TextView) itemView.findViewById(R.id.bookGenre);
-            bookImg=(ImageView) itemView.findViewById(R.id.bookImg);
-            bookDistance=(TextView) itemView.findViewById(R.id.bookDistance);
-
-            this.onBookListener=onBookListener;
             itemView.setOnClickListener(this);
 
 
@@ -78,7 +72,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
         @Override
         public void onClick(View v) {
-            onBookListener.onBookClick(getAdapterPosition());
+            onChatListener.onChatClick(getAdapterPosition());
         }
     }
 
@@ -88,10 +82,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View bookView = inflater.inflate(R.layout.book_list_layout, parent, false);
+        View chatView = inflater.inflate(R.layout.chat_list_layout, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(bookView, mOnBookListener);
+        ViewHolder viewHolder = new ViewHolder(chatView, mOnChatListener);
         return viewHolder;
     }
 
@@ -101,33 +95,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         final long ONE_MEGABYTE = 1024 * 1024;
 
         // Get the data model based on position
-        Book book = books.get(position);
-        book.setImgUrl();
-        TextView bookName=viewHolder.bookName;
-        bookName.setText(book.getName());
-        TextView bookAuthor=viewHolder.bookAuthor;
-        bookAuthor.setText(book.getAuthor());
-        RatingBar bookRating=viewHolder.bookRating;
-        bookRating.setRating(book.getRating());
-        TextView bookGenre=viewHolder.bookGenre;
-        bookGenre.setText(book.getGenre());
-        ImageView bookImg=viewHolder.bookImg;
-        TextView bookDistance=viewHolder.bookDistance;
-        //bookDistance.setText(String.valueOf(book.getDistance(userLoc))+" km away");
-
-        Log.d("book_cover", ""+book.getImgUrl());
-        Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(bookImg);
+        ChatCon chatCon = chatCons.get(position);
+        TextView user1 = viewHolder.user1;
+        user1.setText(chatCon.getUser1());
+        TextView user2 = viewHolder.user2;
+        user2.setText(chatCon.getUser2());
 
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return books.size();
+        return chatCons.size();
     }
 
-    public interface OnBookListener{
-        void onBookClick(int position);
+    public interface OnChatListener{
+        void onChatClick(int position);
     }
 }
 

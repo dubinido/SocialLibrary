@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.sociallibrary.MapsActivity.currentLocation;
 
@@ -102,6 +103,15 @@ public class Product extends AppCompatActivity {
         btnAddBorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String child = userBookId+"_"+userId+"_"+id;
+                databaseBooks.child("chatCons").child(child).child("time").setValue(new Date().getTime());
+                databaseBooks.child("chatCons").child(child).child("chatId").setValue(child);
+                boolean borrow = false;
+                databaseBooks.child("chatCons").child(child).child("borrow").setValue(borrow);
+                databaseBooks.child("chatCons").child(child).child("isbn").setValue(id);
+                databaseBooks.child("chatCons").child(child).child("user2").setValue(userId);
+                databaseBooks.child("chatCons").child(child).child("user1").setValue(userBookId);
+
                 Intent intent = new Intent(Product.this, chat.class);
                 intent.putExtra("user1", userId);
                 intent.putExtra("user2",userBookId );

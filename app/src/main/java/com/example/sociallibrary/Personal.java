@@ -46,7 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener{
+public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener, ChatAdapter.OnChatListener{
 
     private GoogleSignInClient mGoogleSignInClient;
     Button btnMain, btnSignOut;
@@ -62,7 +62,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
     List<Book> wishlist;
     List<Book> books;
-    List<Book> borrowed;
+    List<ChatCon> chatCons;
 
     RecyclerView rvWishlist, rvBooks,rvBorrowed;
     Button btnWishlist, btnBooks, btnBorrowed;
@@ -123,8 +123,9 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
         books = new ArrayList<>();
         wishlist = new ArrayList<>();
-        borrowed = new ArrayList<>();
+        chatCons = new ArrayList<>();
         updateBooks2();
+        updateChat();
 
     }
 
@@ -234,7 +235,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
             public void onClick(View v) {
                 rvBooks.setVisibility(View.GONE);
                 rvWishlist.setVisibility(View.GONE);
-                if (borrowed.isEmpty())
+                if (chatCons.isEmpty())
                 {
                     rvBorrowed.setVisibility(View.GONE);
                     tvPersonalEmpty.setVisibility(View.VISIBLE);
@@ -295,11 +296,9 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                 else {
                     wishlist.clear();
                     books.clear();
-                    borrowed.clear();
 
                     wishlistIds = user.getWishlist().keySet();
                     booksIds = user.getBooks().keySet();
-                    borrowedIds = user.getBorrowed().keySet();
 
                     for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                         Book book = bookSnapshot.getValue(Book.class);
@@ -307,8 +306,6 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                             wishlist.add(book);
                         if (booksIds.contains(book.getId()))
                             books.add(book);
-                        if (borrowedIds.contains(book.getId()))
-                            borrowed.add(book);
                     }
 
                     BookAdapter adapterWishlist = new BookAdapter(wishlist, Personal.this);
@@ -318,10 +315,6 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                     BookAdapter adapterBooks = new BookAdapter(books, Personal.this);
                     rvBooks.setAdapter(adapterBooks);
                     rvBooks.setLayoutManager(new LinearLayoutManager(Personal.this));
-
-                    BookAdapter adapterBorrowed = new BookAdapter(borrowed, Personal.this);
-                    rvBorrowed.setAdapter(adapterBorrowed);
-                    rvBorrowed.setLayoutManager(new LinearLayoutManager(Personal.this));
 
                     if (wishlist.isEmpty())
                     {
@@ -339,8 +332,6 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                     btnBorrowed.setBackgroundResource(R.drawable.roundedbutton);
                 }
 
-
-
             }
 
             @Override
@@ -352,6 +343,30 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
     }
 
+    private void updateChat(){
+        Query getChats = databaseBooks.child("chatCons");
+        getChats.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot chatSnapshot:dataSnapshot.getChildren())
+                {
+                    ChatCon chatCon = chatSnapshot.getValue(ChatCon.class);
+                    if (chatCon.getUser1().equals(userId)||chatCon.getUser2().equals(userId))
+                        chatCons.add(chatCon);
+                }
+                // chat adpter
+                ChatAdapter adapterChatCons = new ChatAdapter(chatCons, Personal.this);
+                rvBorrowed.setAdapter(adapterChatCons);
+                rvBorrowed.setLayoutManager(new LinearLayoutManager(Personal.this));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     @Override
     public void onBookClick(int position) {
@@ -359,4 +374,14 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
     }
 
 
+    @Override
+    public void onChatClick(int position) {
+        Intent intent = new Intent(Personal.this, chat.class);
+        intent.putExtra("user1", chatCons.get(position).getUser1());
+        intent.putExtra("user2",chatCons.get(position).getUser2());
+        intent.putExtra("bookBorrowed", chatCons.get(position).getIsbn());
+        startActivity(intent);
+
+
+    }
 }
