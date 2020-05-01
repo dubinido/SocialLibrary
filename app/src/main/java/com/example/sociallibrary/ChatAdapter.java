@@ -43,7 +43,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     public ChatAdapter(List<ChatCon> mChatCons,OnChatListener onChatListener) {
         this.chatCons = mChatCons;
         this.mOnChatListener = onChatListener;
-
     }
 
     // Provide a direct reference to each of the views within a data item
@@ -52,6 +51,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView user1,user2;
+        ImageView img;
         OnChatListener onChatListener;
 
         // We also create a constructor that accepts the entire item row
@@ -63,6 +63,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
             user1 = (TextView) itemView.findViewById(R.id.chatUser1);
             user2 = (TextView) itemView.findViewById(R.id.chatUser2);
+            img = (ImageView) itemView.findViewById(R.id.chat_icon);
+
             this.onChatListener = onChatListener;
 
             itemView.setOnClickListener(this);
@@ -97,10 +99,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         // Get the data model based on position
         ChatCon chatCon = chatCons.get(position);
         TextView user1 = viewHolder.user1;
-        user1.setText(chatCon.getUser1());
+        user1.setText(chatCon.getName1());
         TextView user2 = viewHolder.user2;
-        user2.setText(chatCon.getUser2());
+        user2.setText(chatCon.getName2());
+        ImageView img = viewHolder.img;
 
+        Picasso.get().load(chatCon.getUrl()).placeholder(R.drawable.group_icon).error(R.drawable.group_icon).into(img);
     }
 
     // Returns the total count of items in the list

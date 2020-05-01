@@ -9,6 +9,8 @@
         android:layout_height="match_parent"
         android:background="@drawable/roundchat"
         android:id="@+id/list_item"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="3dp"
         >
 
         <TextView
@@ -18,7 +20,8 @@
             android:textStyle="normal|bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#2B2B2B"/>
+            android:textColor="#2B2B2B"
+            android:text="user"/>
 
         <TextView
             android:id="@+id/message_time"
@@ -27,7 +30,8 @@
             android:textStyle="normal|bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#2B2B2B"/>
+            android:textColor="#2B2B2B"
+            android:text="time"/>
 
         <TextView
             android:id="@+id/message_text"
@@ -38,7 +42,8 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="18sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="text"/>
     </RelativeLayout>
 
 </RelativeLayout>

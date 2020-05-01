@@ -354,6 +354,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                     if (chatCon.getUser1().equals(userId)||chatCon.getUser2().equals(userId))
                         chatCons.add(chatCon);
                 }
+                chatCons = bubbleSort(chatCons);
                 // chat adpter
                 ChatAdapter adapterChatCons = new ChatAdapter(chatCons, Personal.this);
                 rvBorrowed.setAdapter(adapterChatCons);
@@ -384,4 +385,19 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
 
     }
+
+    private List<ChatCon> bubbleSort(List<ChatCon> arr) {
+        int i, j;
+        for (i = 0; i < arr.size() - 1; i++) {
+            for (j = 0; j < arr.size() - i - 1; j++) {
+                if (arr.get(j).getTime() - (arr.get(j + 1).getTime()) < 0) {
+                    ChatCon temp = arr.get(j);
+                    arr.set(j, arr.get(j + 1));
+                    arr.set(j + 1, temp);
+                }
+            }
+        }
+        return arr;
+    }
+
 }

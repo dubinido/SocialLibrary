@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import android.text.format.DateFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class chat extends AppCompatActivity {
@@ -76,6 +77,7 @@ public class chat extends AppCompatActivity {
                 EditText input = findViewById(R.id.input);
                 FirebaseDatabase.getInstance().getReference("chat").child(user1 + "_" + user2 + "_" +bookBorrowed).push().setValue(
                         new ChatMessage(input.getText().toString(), userName,userId));
+                FirebaseDatabase.getInstance().getReference("chatCons").child(user1+"_"+user2+"_"+bookBorrowed).child("time").setValue(new Date().getTime());
                 input.setText("");
             }
         });
