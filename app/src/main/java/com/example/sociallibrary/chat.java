@@ -2,6 +2,7 @@ package com.example.sociallibrary;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -124,7 +125,7 @@ public class chat extends AppCompatActivity {
 
 
                 if (model.getMessageUserId().equals(user1))
-                    listItem.setBackgroundColor(Color.GREEN);
+                    listItem.setBackgroundResource(R.drawable.roundchat2);
 
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());
