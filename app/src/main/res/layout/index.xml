@@ -126,6 +126,9 @@
             android:gravity="center"
             android:textAlignment="center"
             android:background="#fff"
+            android:popupBackground="#FFF"
+            android:textColor="#FF000000"
+
             />
 
         <ImageView

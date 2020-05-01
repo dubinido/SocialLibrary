@@ -1,5 +1,6 @@
 package com.example.sociallibrary;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.view.Menu;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -47,6 +49,7 @@ public class chat extends AppCompatActivity {
     ImageButton fab;
     String user1, user2, bookBorrowed, userName,userId;
     private GoogleSignInClient mGoogleSignInClient;
+    Button btnBack, btnAccept;
 
 
     @Override
@@ -79,6 +82,33 @@ public class chat extends AppCompatActivity {
                         new ChatMessage(input.getText().toString(), userName,userId));
                 FirebaseDatabase.getInstance().getReference("chatCons").child(user1+"_"+user2+"_"+bookBorrowed).child("time").setValue(new Date().getTime());
                 input.setText("");
+            }
+        });
+
+        btnBack = findViewById(R.id.btn_Back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent intent = new Intent(chat.this, Personal.class);
+                    startActivity(intent);
+            }
+        });
+
+        btnAccept = findViewById(R.id.btn_Accept);
+
+        if(user2.equals(userId))
+            btnAccept.setVisibility(View.VISIBLE);
+
+
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //TODO: dialogbox
+                FirebaseDatabase.getInstance().getReference("chatCons").child(user1+"_"+user2+"_"+bookBorrowed)
+                .child("borrow").setValue("true");
+
+
             }
         });
 
@@ -131,7 +161,7 @@ public class chat extends AppCompatActivity {
 
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",model.getMessageTime()));
+                messageTime.setText(DateFormat.format("dd/MM/yyyy   HH:mm",model.getMessageTime()));
                 Log.d("ido", "inside");
             }
         };
