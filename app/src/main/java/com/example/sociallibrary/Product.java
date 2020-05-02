@@ -95,7 +95,7 @@ public class Product extends AppCompatActivity {
                 //closeBook();
                 //dubin?
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                intent.putExtra(Index.BOOK_ISBN,id);
+                intent.putExtra("mapUser",userBookId);
                 startActivity(intent);
             }
         });

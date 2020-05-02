@@ -141,6 +141,7 @@ public class Index extends AppCompatActivity implements BookAdapter.OnBookListen
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Index.this, MapsActivity.class);
+                intent.putExtra("mapUser","home");
                 startActivity(intent);
             }
         });

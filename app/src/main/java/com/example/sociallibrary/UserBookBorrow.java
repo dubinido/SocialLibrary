@@ -70,6 +70,7 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserBookBorrow.this, MapsActivity.class);
+                intent.putExtra("mapUser",id);
                 startActivity(intent);
             }
         });
@@ -85,6 +86,8 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
         Intent intent = new Intent(getApplicationContext(),Product.class);
 
         intent.putExtra(Index.BOOK_ID,books.get(position).getId());
+        intent.putExtra(Index.USER_ID,books.get(position).getUser().getId());
+        startActivity(intent);
 
         startActivity(intent);
     }

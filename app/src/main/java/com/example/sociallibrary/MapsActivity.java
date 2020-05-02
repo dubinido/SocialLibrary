@@ -62,7 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     List<String> booksIds;
     public static final String USER_ID = "userId";
     RecyclerView rvBooks;
-    User user;
+    LatLng bookLatlng;
+    String mapUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         databaseBooks = FirebaseDatabase.getInstance().getReference();
 
+        Intent intent = getIntent();
+        mapUser= intent.getStringExtra("mapUser");
 
+        if (!mapUser.equals("home")) {
+            Query qUser = databaseBooks.child("users").child(mapUser);
+            qUser.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+
+                    bookLatlng = user.getLocation();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
 
@@ -123,10 +142,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (currentLocation != null) {
             latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.fromBitmap(my_smallMarker)); //this is how to put icon for book
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16)); // select the best zoom for us between 2 to 21
-            // 21 is the closest
+                    .icon(BitmapDescriptorFactory.fromBitmap(my_smallMarker));//this is how to put icon for book
+            if (mapUser.equals("home")) {
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16)); // select the best zoom for us between 2 to 21
+                // 21 is the closest
+            }
+            else
+            {
+                if (bookLatlng!=null) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(bookLatlng));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bookLatlng, 16));
+                }
+                else
+                {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16)); // select the best zoom for us between 2 to 21
+                    // 21 is the closest
+                }
+            }
             googleMap.addMarker(markerOptions); // my marker - my place
             placeBooks(googleMap, databaseBooks);
 
