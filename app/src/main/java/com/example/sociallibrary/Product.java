@@ -187,9 +187,7 @@ public class Product extends AppCompatActivity {
 
     private void addToWishlist()
     {
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
-        databaseBooks.child("users").child(userId).child("wishlist").child(id).setValue(currentDate);
+        databaseBooks.child("users").child(userId).child("wishlist").child(id).setValue(userBookId);
     }
 
     private void closeBook()

@@ -44,6 +44,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.frame.Frame;
 import com.otaliastudios.cameraview.frame.FrameProcessor;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -138,10 +139,10 @@ public class ScanActivity extends AppCompatActivity {
                String id = item.getRawValue();
                bookId=id;
                Toast.makeText(this,bookId,Toast.LENGTH_SHORT).show();
-               //showDialog();
-               Intent intent=new Intent(getApplicationContext(),AddBook.class);
-               intent.putExtra("isbn",bookId);
-               startActivity(intent);
+               showDialog();
+               //Intent intent=new Intent(getApplicationContext(),AddBook.class);
+               //intent.putExtra("isbn",bookId);
+               //startActivity(intent);
 
                break;
 
@@ -185,7 +186,7 @@ public class ScanActivity extends AppCompatActivity {
         final TextView tvdName = (TextView) dialogView.findViewById(R.id.tvdName);
         final TextView tvdAuthor = (TextView) dialogView.findViewById(R.id.tvdAuthor);
         final TextView tvdGenre = (TextView) dialogView.findViewById(R.id.tvdGenre);
-        ImageView tvdImg = (ImageView) dialogView.findViewById(R.id.tvdImg);
+        final ImageView tvdImg = (ImageView) dialogView.findViewById(R.id.tvdImg);
         Query getBook = dbRef.child("books").child(bookId);
         getBook.addValueEventListener(new ValueEventListener() {
             @Override
@@ -194,7 +195,7 @@ public class ScanActivity extends AppCompatActivity {
                 tvdName.setText(book.getName());
                 tvdAuthor.setText(book.getAuthor());
                 tvdGenre.setText(book.getGenre());
-            //image
+                Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(tvdImg);
             }
 
             @Override
@@ -218,7 +219,7 @@ public class ScanActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
                 dbRef.child("users").child(userId).child("books").child(bookId).setValue(currentDate);
-                Toast.makeText(ScanActivity.this,userId,Toast.LENGTH_LONG).show();
+                Toast.makeText(ScanActivity.this,"You added the book!",Toast.LENGTH_LONG).show();
                 dialogBuilder.dismiss();
             }
         });

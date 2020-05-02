@@ -34,15 +34,16 @@ import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
 {
-    private List<ChatCon> chatCons;
-    private OnChatListener mOnChatListener;
+    private List<Book> books;
+    private onMyListener monMyListener;
 
     //constructor
-    public ChatAdapter(List<ChatCon> mChatCons,OnChatListener onChatListener) {
-        this.chatCons = mChatCons;
-        this.mOnChatListener = onChatListener;
+    public MyAdapter(List<Book> mbooks,onMyListener onMyListener) {
+        this.books = mbooks;
+        this.monMyListener=onMyListener;
+
     }
 
     // Provide a direct reference to each of the views within a data item
@@ -50,23 +51,29 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        TextView user1,user2;
-        ImageView img;
-        OnChatListener onChatListener;
+        TextView bookName;
+        TextView bookAuthor;
+        TextView bookDistance;
+        RatingBar bookRating;
+        TextView bookGenre;
+        ImageView bookImg;
+        onMyListener onMyListener;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
-        public ViewHolder(View itemView,OnChatListener onChatListener) {
+        public ViewHolder(View itemView,onMyListener onMyListener) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            user1 = (TextView) itemView.findViewById(R.id.chatUser1);
-            user2 = (TextView) itemView.findViewById(R.id.chatUser2);
-            img = (ImageView) itemView.findViewById(R.id.chat_icon);
+            bookName = (TextView) itemView.findViewById(R.id.bookName);
+            bookAuthor=(TextView) itemView.findViewById(R.id.bookAuthor);
+            bookRating=(RatingBar) itemView.findViewById(R.id.bookRating);
+            bookGenre=(TextView) itemView.findViewById(R.id.bookGenre);
+            bookImg=(ImageView) itemView.findViewById(R.id.bookImg);
+            bookDistance=(TextView) itemView.findViewById(R.id.bookDistance);
 
-            this.onChatListener = onChatListener;
-
+            this.onMyListener=onMyListener;
             itemView.setOnClickListener(this);
 
 
@@ -74,47 +81,56 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
         @Override
         public void onClick(View v) {
-            onChatListener.onChatClick(getAdapterPosition());
+            onMyListener.onMyClick(getAdapterPosition());
         }
     }
 
     @Override
-    public ChatAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View chatView = inflater.inflate(R.layout.chat_list_layout, parent, false);
+        View bookView = inflater.inflate(R.layout.book_list_layout, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(chatView, mOnChatListener);
+        ViewHolder viewHolder = new ViewHolder(bookView, monMyListener);
         return viewHolder;
     }
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(ChatAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(MyAdapter.ViewHolder viewHolder, int position) {
         final long ONE_MEGABYTE = 1024 * 1024;
 
         // Get the data model based on position
-        ChatCon chatCon = chatCons.get(position);
-        TextView user1 = viewHolder.user1;
-        user1.setText(chatCon.getName1());
-        TextView user2 = viewHolder.user2;
-        user2.setText(chatCon.getName2());
-        ImageView img = viewHolder.img;
-        Picasso.get().load(chatCon.getUrl()).placeholder(R.drawable.group_icon).error(R.drawable.icon_book).into(img);
-        Log.d("url:", chatCon.getUrl());
+        Book book = books.get(position);
+        book.setImgUrl();
+        TextView bookName=viewHolder.bookName;
+        bookName.setText(book.getName());
+        TextView bookAuthor=viewHolder.bookAuthor;
+        bookAuthor.setText(book.getAuthor());
+        RatingBar bookRating=viewHolder.bookRating;
+        bookRating.setRating(book.getRating());
+        TextView bookGenre=viewHolder.bookGenre;
+        bookGenre.setText(book.getGenre());
+        ImageView bookImg=viewHolder.bookImg;
+        TextView bookDistance=viewHolder.bookDistance;
+        //bookDistance.setText(String.valueOf(book.getDistance(userLoc))+" km away");
+
+        Log.d("book_cover", ""+book.getImgUrl());
+        Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(bookImg);
+
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return chatCons.size();
+        return books.size();
     }
 
-    public interface OnChatListener{
-        void onChatClick(int position);
+    public interface onMyListener{
+        void onMyClick(int position);
     }
 }
 

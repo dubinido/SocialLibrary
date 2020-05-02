@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:padding="16dp"
+    android:paddingVertical="16dp"
     tools:context=".chat">
 
     <Button
@@ -59,6 +59,7 @@
         android:textColorHint="@android:color/tertiary_text_light" />
 
     <ListView
+        android:paddingHorizontal="15dp"
         android:id="@+id/list_of_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,7 +69,8 @@
         android:layout_alignParentTop="false"
         android:layout_marginBottom="16dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="16dp" />
+        android:dividerHeight="16dp"
+        android:background="#DCDCDC"/>
 
 
 </RelativeLayout>

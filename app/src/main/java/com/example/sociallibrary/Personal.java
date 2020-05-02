@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -40,13 +42,15 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener, ChatAdapter.OnChatListener{
+public class Personal extends AppCompatActivity implements BookAdapter.OnBookListener, ChatAdapter.OnChatListener,MyAdapter.onMyListener{
 
     private GoogleSignInClient mGoogleSignInClient;
     Button btnMain, btnSignOut;
@@ -68,6 +72,8 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
     Button btnWishlist, btnBooks, btnBorrowed;
     TextView tvPersonalEmpty;
 
+    DatabaseReference dbRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +85,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
          // Check for existing Google Sign In account, if the user is already signed in
          // the GoogleSignInAccount will be non-null.
          GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
+         dbRef = FirebaseDatabase.getInstance().getReference();
         btnMain = findViewById(R.id.btnMain);
         btnSignOut = findViewById(R.id.btnSignout);
         tvHelloUser = findViewById(R.id.tvHelloUser);
@@ -302,8 +308,9 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
                     for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                         Book book = bookSnapshot.getValue(Book.class);
-                        if (wishlistIds.contains(book.getId()))
+                        if (wishlistIds.contains(book.getId())) {
                             wishlist.add(book);
+                        }
                         if (booksIds.contains(book.getId()))
                             books.add(book);
                     }
@@ -312,7 +319,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                     rvWishlist.setAdapter(adapterWishlist);
                     rvWishlist.setLayoutManager(new LinearLayoutManager(Personal.this));
 
-                    BookAdapter adapterBooks = new BookAdapter(books, Personal.this);
+                    MyAdapter adapterBooks = new MyAdapter(books, Personal.this);
                     rvBooks.setAdapter(adapterBooks);
                     rvBooks.setLayoutManager(new LinearLayoutManager(Personal.this));
 
@@ -372,7 +379,6 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
     @Override
     public void onBookClick(int position) {
-
     }
 
 
@@ -400,4 +406,65 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
         return arr;
     }
 
+    @Override
+    public void onMyClick(int position) {
+        showDialog(books.get(position).getId());
+
+    }
+
+
+    private void showDialog(final String bookId)
+    {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.product_dialog_box, null);
+
+
+        Button btnAddYes = (Button) dialogView.findViewById(R.id.btnAddYes);
+        Button btnAddNo = (Button) dialogView.findViewById(R.id.btnAddNo);
+        final TextView tvdName = (TextView) dialogView.findViewById(R.id.tvdName);
+        final TextView tvdAuthor = (TextView) dialogView.findViewById(R.id.tvdAuthor);
+        final TextView tvdGenre = (TextView) dialogView.findViewById(R.id.tvdGenre);
+        final ImageView tvdImg = (ImageView) dialogView.findViewById(R.id.tvdImg);
+        final TextView tvdTitle = (TextView) dialogView.findViewById(R.id.tvdTitle);
+        tvdTitle.setText("Do you want to remove this book?");
+        Query getBook = dbRef.child("books").child(bookId);
+        getBook.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Book book = dataSnapshot.getValue(Book.class);
+                tvdName.setText(book.getName());
+                tvdAuthor.setText(book.getAuthor());
+                tvdGenre.setText(book.getGenre());
+                Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(tvdImg);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        btnAddNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialogBuilder.dismiss();
+            }
+        });
+        btnAddYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dbRef.child("users").child(userId).child("books").child(bookId).removeValue();
+                Toast.makeText(Personal.this,"the book has been removed",Toast.LENGTH_LONG).show();
+                dialogBuilder.dismiss();
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
+    }
 }

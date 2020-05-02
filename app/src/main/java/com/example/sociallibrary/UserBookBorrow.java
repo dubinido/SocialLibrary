@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
+    TextView btnUserBack;
 
     TextView userName,tvUserDistance,tvUserBookBorrowEmpty;
     RecyclerView rvBooks;
@@ -63,6 +65,14 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
         makeTheList();
         tvUserDistance = (TextView) findViewById(R.id.tvUserdistance);
 
+        btnUserBack = (TextView) findViewById(R.id.btnUserBack);
+        btnUserBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserBookBorrow.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
         double myLat = Double.parseDouble(intent.getStringExtra("MyLat"));
         double myLng = Double.parseDouble(intent.getStringExtra("MyLng"));
         LatLng myLatLng = new LatLng(myLat, myLng);

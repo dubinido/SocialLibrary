@@ -50,6 +50,8 @@ public class chat extends AppCompatActivity {
     String user1, user2, bookBorrowed, userName,userId;
     private GoogleSignInClient mGoogleSignInClient;
     Button btnBack, btnAccept;
+    ChatCon chatCon;
+    DatabaseReference dbRef;
 
 
     @Override
@@ -63,13 +65,31 @@ public class chat extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
+        dbRef = FirebaseDatabase.getInstance().getReference();
+
         activity_chat = findViewById(R.id.activity_chat);
 
         //the keys to the path to the chat
         user1 = getIntent().getExtras().getString("user1");
         user2 = getIntent().getExtras().getString("user2");
         bookBorrowed = getIntent().getExtras().getString("bookBorrowed");
+        Query qChatCon = dbRef.child("chatCons").child(user1 + "_" + user2 + "_" +bookBorrowed);
+        qChatCon.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatCon = dataSnapshot.getValue(ChatCon.class);
+                if (chatCon.isBorrow())
+                    btnAccept.setText("RETRIEVE");
+                else
+                    btnAccept.setText("ACCEPT");
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         userName =getFirstName();
         userId = getUserId();
 
@@ -105,8 +125,9 @@ public class chat extends AppCompatActivity {
             public void onClick(View v) {
 
                 //TODO: dialogbox
+                boolean borrow = chatCon.isBorrow();
                 FirebaseDatabase.getInstance().getReference("chatCons").child(user1+"_"+user2+"_"+bookBorrowed)
-                .child("borrow").setValue("true");
+                .child("borrow").setValue(!borrow);
 
 
             }
@@ -158,6 +179,8 @@ public class chat extends AppCompatActivity {
 
                 if (model.getMessageUserId().equals(user1))
                     listItem.setBackgroundResource(R.drawable.roundchat2);
+                else
+                    listItem.setBackgroundResource(R.drawable.roundchat);
 
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());

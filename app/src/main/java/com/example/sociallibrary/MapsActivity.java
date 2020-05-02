@@ -125,7 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions markerOptions = new MarkerOptions().position(latLng)
                     .icon(BitmapDescriptorFactory.fromBitmap(my_smallMarker)); //this is how to put icon for book
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13)); // select the best zoom for us between 2 to 21
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16)); // select the best zoom for us between 2 to 21
             // 21 is the closest
             googleMap.addMarker(markerOptions); // my marker - my place
             placeBooks(googleMap, databaseBooks);
