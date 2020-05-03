@@ -287,7 +287,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
             }
         });
     }
-    // TODO: open up first look of list, if empty and color button
+
     private void updateBooks()
     {
         Query getBooks = databaseBooks.child("books");
@@ -379,6 +379,7 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
 
     @Override
     public void onBookClick(int position) {
+        showDialogWish((wishlist.get(position).getId()));
     }
 
 
@@ -463,7 +464,58 @@ public class Personal extends AppCompatActivity implements BookAdapter.OnBookLis
                 dialogBuilder.dismiss();
             }
         });
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
+    }
 
+    private void showDialogWish(final String bookId)
+    {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.product_dialog_box, null);
+
+
+        Button btnAddYes = (Button) dialogView.findViewById(R.id.btnAddYes);
+        Button btnAddNo = (Button) dialogView.findViewById(R.id.btnAddNo);
+        final TextView tvdName = (TextView) dialogView.findViewById(R.id.tvdName);
+        final TextView tvdAuthor = (TextView) dialogView.findViewById(R.id.tvdAuthor);
+        final TextView tvdGenre = (TextView) dialogView.findViewById(R.id.tvdGenre);
+        final ImageView tvdImg = (ImageView) dialogView.findViewById(R.id.tvdImg);
+        final TextView tvdTitle = (TextView) dialogView.findViewById(R.id.tvdTitle);
+        tvdTitle.setText("Do you want to remove this book from wishlist?");
+        Query getBook = dbRef.child("books").child(bookId);
+        getBook.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Book book = dataSnapshot.getValue(Book.class);
+                tvdName.setText(book.getName());
+                tvdAuthor.setText(book.getAuthor());
+                tvdGenre.setText(book.getGenre());
+                Picasso.get().load(book.getImgUrl()).placeholder(R.drawable.icon_book).error(R.drawable.icon_book).into(tvdImg);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        btnAddNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialogBuilder.dismiss();
+            }
+        });
+        btnAddYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dbRef.child("users").child(userId).child("wishlist").child(bookId).removeValue();
+                Toast.makeText(Personal.this,"the book has been removed",Toast.LENGTH_LONG).show();
+                dialogBuilder.dismiss();
+            }
+        });
         dialogBuilder.setView(dialogView);
         dialogBuilder.show();
     }

@@ -86,10 +86,9 @@ public class UserBookBorrow extends AppCompatActivity implements BookAdapter.OnB
         Intent intent = new Intent(getApplicationContext(),Product.class);
 
         intent.putExtra(Index.BOOK_ID,books.get(position).getId());
-        intent.putExtra(Index.USER_ID,books.get(position).getUser().getId());
+        intent.putExtra(Index.USER_ID,id);
         startActivity(intent);
 
-        startActivity(intent);
     }
 
     private void makeTheList()

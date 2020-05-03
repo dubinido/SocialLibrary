@@ -124,12 +124,13 @@ public class chat extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO: dialogbox
                 boolean borrow = chatCon.isBorrow();
                 FirebaseDatabase.getInstance().getReference("chatCons").child(user1+"_"+user2+"_"+bookBorrowed)
                 .child("borrow").setValue(!borrow);
-
-
+                if (borrow)
+                    Toast.makeText(chat.this,"the has been returned",Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(chat.this,"the has been borrowed",Toast.LENGTH_LONG).show();
             }
         });
 
